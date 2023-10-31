@@ -22,6 +22,7 @@ return {
 					treesitter = true,
 					neotree = false,
 					notify = false,
+					noice = true,
 					alpha = true,
 					telescope = {
 						enabled = true,

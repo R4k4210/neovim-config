@@ -32,6 +32,11 @@ keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
 
+keymap.set("n", "<C-S-Left>", ":vertical resize +5<CR>", { silent = true, noremap = true })
+keymap.set("n", "<C-S-Right>", ":vertical resize -5<CR>", { silent = true, noremap = true })
+keymap.set("n", "<C-S-Right>", ":resize +5<CR>", { silent = true, noremap = true })
+keymap.set("n", "<C-S-Left>", ":resize -5<CR>", { silent = true, noremap = true })
+
 keymap.set("n", "dw", "dvb", { desc = "Delete word backwards" })
 
 -- Lazydocker
