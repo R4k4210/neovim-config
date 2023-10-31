@@ -16,7 +16,7 @@ require("lazy").setup({
 	{ import = "r4k4210.plugins.lsp" },
 }, {
 	install = {
-		colorscheme = { "nightfly" },
+		colorscheme = { "catppuccin" },
 	},
 	checker = {
 		enabled = true,
