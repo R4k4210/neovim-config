@@ -61,7 +61,7 @@ keymap.set(
 	{ desc = "Buffer sort by directory", silent = true }
 )
 keymap.set("n", "<leader>b>", "<cmd>BufferLineMoveNext<CR>", { desc = "Buffer move next", silent = true })
-keymap.set("n", "<leader>b<", "<cmd>BufferLineMoveNext<CR>", { desc = "Buffer move prev", silent = true })
+keymap.set("n", "<leader>b<", "<cmd>BufferLineMovePrev<CR>", { desc = "Buffer move prev", silent = true })
 
 -- Move code
 keymap.set("n", "<M-k>", "<cmd>m .-2<CR>", { desc = "move line up" })
