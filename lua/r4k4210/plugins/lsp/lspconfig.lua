@@ -6,6 +6,13 @@ return {
 		{ "antosha417/nvim-lsp-file-operations", config = true },
 	},
 	config = function()
+		vim.diagnostic.config({
+			virtual_text = false,
+			signs = true,
+			underline = true,
+			update_in_insert = false,
+			severity_sort = false,
+		})
 		-- import lspconfig plugin
 		local lspconfig = require("lspconfig")
 
@@ -72,6 +79,11 @@ return {
 
 		-- configure html server
 		lspconfig["html"].setup({
+			capabilities = capabilities,
+			on_attach = on_attach,
+		})
+
+		lspconfig["eslint"].setup({
 			capabilities = capabilities,
 			on_attach = on_attach,
 		})
