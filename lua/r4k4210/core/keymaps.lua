@@ -81,3 +81,11 @@ keymap.set("n", "<leader>gc", "<cmd>DiffviewClose<CR>", { desc = "DiffviewClose"
 
 -- Lazygit
 keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "Open Lazygit" })
+
+-- Gitsigns
+keymap.set("n", "<leader>gs", "<cmd>Gitsigns stage_hunk<CR>", { desc = "Git stage hunk" })
+keymap.set("n", "<leader>gr", "<cmd>Gitsigns reset_hunk<CR>", { desc = "Git reset hunk" })
+keymap.set("n", "<leader>gb", "<cmd>Gitsigns stage_buffer<CR>", { desc = "Git stage buffer" })
+keymap.set("n", "<leader>gR", "<cmd>Gitsigns reset_buffer<CR>", { desc = "Git reset buffer" })
+keymap.set("n", "<leader>gu", "<cmd>Gitsigns undo_stage_hunk<CR>", { desc = "Git undo stage hunk" })
+keymap.set("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<CR>", { desc = "Git preview hunk" })
