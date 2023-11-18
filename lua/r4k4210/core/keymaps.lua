@@ -89,3 +89,8 @@ keymap.set("n", "<leader>gb", "<cmd>Gitsigns stage_buffer<CR>", { desc = "Git st
 keymap.set("n", "<leader>gR", "<cmd>Gitsigns reset_buffer<CR>", { desc = "Git reset buffer" })
 keymap.set("n", "<leader>gu", "<cmd>Gitsigns undo_stage_hunk<CR>", { desc = "Git undo stage hunk" })
 keymap.set("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<CR>", { desc = "Git preview hunk" })
+
+-- Rename inc-rename
+vim.keymap.set("n", "<leader>rn", function()
+  return ":IncRename " .. vim.fn.expand("<cword>")
+end, { expr = true })
