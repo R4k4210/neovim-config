@@ -73,7 +73,7 @@ keymap.set("n", "<leader>b<", "<cmd>BufferLineMovePrev<CR>", { desc = "Buffer mo
 
 -- Move code
 keymap.set("n", "<M-k>", "<cmd>m .-2<CR>", { desc = "move line up" })
-keymap.set("n", "<M-j>", "<cmd>m .+2<CR>", { desc = "move line down" })
+keymap.set("n", "<M-j>", "<cmd>m .+1<CR>", { desc = "move line down" })
 
 -- Diffview // overrides default diff
 keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", { desc = "DiffviewOpen" })
