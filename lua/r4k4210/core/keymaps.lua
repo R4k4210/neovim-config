@@ -23,6 +23,12 @@ keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
 keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 
+-- move on input mode
+keymap.set("i", "<M-h>", "<Left>")
+keymap.set("i", "<M-j>", "<Down>")
+keymap.set("i", "<M-k>", "<Up>")
+keymap.set("i", "<M-l>", "<Right>")
+
 -- window management
 keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" }) -- split window vertically
 keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" }) -- split window horizontally
@@ -72,8 +78,8 @@ keymap.set("n", "<leader>b>", "<cmd>BufferLineMoveNext<CR>", { desc = "Buffer mo
 keymap.set("n", "<leader>b<", "<cmd>BufferLineMovePrev<CR>", { desc = "Buffer move prev", silent = true })
 
 -- Move code
-keymap.set("n", "<M-k>", "<cmd>m .-2<CR>", { desc = "move line up" })
-keymap.set("n", "<M-j>", "<cmd>m .+1<CR>", { desc = "move line down" })
+keymap.set("n", "<M-Up>", "<cmd>m .-2<CR>", { desc = "move line up" })
+keymap.set("n", "<M-Down>", "<cmd>m .+1<CR>", { desc = "move line down" })
 
 -- Diffview // overrides default diff
 keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", { desc = "DiffviewOpen" })
