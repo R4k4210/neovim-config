@@ -2,15 +2,16 @@ return {
   "nvim-telescope/telescope.nvim",
   branch = "0.1.x",
   dependencies = {
+    "nvim-lua/popup.nvim",
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     "nvim-tree/nvim-web-devicons",
     "nvim-telescope/telescope-file-browser.nvim",
+    "nvim-telescope/telescope-media-files.nvim",
   },
   config = function()
     local telescope = require("telescope")
     local actions = require("telescope.actions")
-    local fb_actions = telescope.extensions.file_browser.actions
 
     telescope.setup({
       defaults = {
@@ -44,12 +45,43 @@ return {
             -- disables netrw and use telescope-file-browser in its place
             hijack_netrw = true,
           },
+          media_files = {
+            -- filetypes whitelist
+            -- defaults to {"png", "jpg", "mp4", "webm", "pdf"}
+            filetypes = { "png", "webp", "jpg", "jpeg" },
+            -- find command (defaults to `fd`)
+            find_cmd = "rg",
+          },
+        },
+        preview = {
+          mime_hook = function(filepath, bufnr, opts)
+            local is_image = function(filepath)
+              local image_extensions = { "png", "jpg" } -- Supported image formats
+              local split_path = vim.split(filepath:lower(), ".", { plain = true })
+              local extension = split_path[#split_path]
+              return vim.tbl_contains(image_extensions, extension)
+            end
+            if is_image(filepath) then
+              local term = vim.api.nvim_open_term(bufnr, {})
+              local function send_output(_, data, _)
+                for _, d in ipairs(data) do
+                  vim.api.nvim_chan_send(term, d .. "\r\n")
+                end
+              end
+              vim.fn.jobstart({
+                "catimg",
+                filepath, -- Terminal image viewer command
+              }, { on_stdout = send_output, stdout_buffered = true, pty = true })
+            else
+              require("telescope.previewers.utils").set_preview_message(bufnr, opts.winid, "Binary cannot be previewed")
+            end
+          end,
         },
       },
     })
-
     telescope.load_extension("fzf")
     telescope.load_extension("file_browser")
+    telescope.load_extension("media_files")
 
     -- set keymaps
     local keymap = vim.keymap
