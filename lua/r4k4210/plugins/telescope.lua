@@ -57,6 +57,7 @@ return {
     keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in current project" })
     keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
     keymap.set("n", "<leader>fw", "<cmd>Telescope live_grep<cr>", { desc = "Find word in current current project" })
+    keymap.set("n", "<leader>fg", "<cmd>Telescope git_bcommits<cr>", { desc = "List buffer's commits" })
     keymap.set(
       "n",
       "<leader>fc",
