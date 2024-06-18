@@ -40,6 +40,11 @@ keymap.set("n", "<C-S-Right>", ":vertical resize -5<CR>", { silent = true, norem
 keymap.set("n", "<C-S-Right>", ":resize +5<CR>", { silent = true, noremap = true })
 keymap.set("n", "<C-S-Left>", ":resize -5<CR>", { silent = true, noremap = true })
 
+vim.keymap.set('i', '<Left>', '<Left>', { noremap = true, silent = true })
+vim.keymap.set('i', '<Right>', '<Right>', { noremap = true, silent = true })
+vim.keymap.set('i', '<Up>', '<Up>', { noremap = true, silent = true })
+vim.keymap.set('i', '<Down>', '<Down>', { noremap = true, silent = true })
+
 keymap.set("n", "dw", "dvb", { desc = "Delete word backwards" })
 
 -- Lazydocker
