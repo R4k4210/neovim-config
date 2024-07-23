@@ -21,19 +21,25 @@ return {
       },
     })
 
-    wk.register({
-      b = "Buffers",
-      c = "Code Actions",
-      f = "Telescope",
-      g = "Git",
-      m = "LazyDocker and format",
-      n = "which_key_ignore",
-      p = "which_key_ignore",
-      r = "LSP",
-      s = "Widows Split",
-      t = "Tabs",
-      u = "UI",
-      z = "Color Picker",
-    }, { prefix = "<leader>" })
+    wk.add({
+      {
+        "<leader>b",
+        group = "Buffers",
+        expand = function()
+          return require("which-key.extras").expand.buf()
+        end
+      },
+      { "<leader>c", desc = "Code Actions" },
+      { "<leader>f", desc = "Telescope" },
+      { "<leader>g", desc = "Git" },
+      { "<leader>m", desc = "LazyDocker and format" },
+      { "<leader>n", hidden = true },
+      { "<leader>p", hidden = true },
+      { "<leader>r", desc = "LSP" },
+      { "<leader>s", desc = "Widows Split" },
+      { "<leader>t", desc = "Tabs" },
+      { "<leader>u", desc = "UI" },
+      { "<leader>z", desc = "Color Picker" }
+    })
   end,
 }
