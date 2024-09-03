@@ -95,8 +95,9 @@ keymap.set("n", "<leader>gf", "<cmd>Gitsigns stage_buffer<CR>", { desc = "Git st
 keymap.set("n", "<leader>gR", "<cmd>Gitsigns reset_buffer<CR>", { desc = "Git reset buffer" })
 keymap.set("n", "<leader>gu", "<cmd>Gitsigns undo_stage_hunk<CR>", { desc = "Git undo stage hunk" })
 keymap.set("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<CR>", { desc = "Git preview hunk" })
-keymap.set("n", "<leader>gb", "<cmd>lua require'gitsigns'.blame_line{full=true}<CR>", { desc = "Git blame full" })
-keymap.set("n", "<leader>gt", "<cmd>Gitsigns toggle_current_line_blame<CR>", { desc = "Git blame line" })
+keymap.set("n", "<leader>gb", "<cmd>Gitsigns blame_line<CR>", { desc = "Git blame line" })
+keymap.set("n", "<leader>gB", "<cmd>lua require'gitsigns'.blame_line{full=true}<CR>", { desc = "Git blame full" })
+keymap.set("n", "<leader>gt", "<cmd>Gitsigns toggle_current_line_blame<CR>", { desc = "Git toggle line blame" })
 
 -- Rename inc-rename
 vim.keymap.set("n", "<leader>rn", function()

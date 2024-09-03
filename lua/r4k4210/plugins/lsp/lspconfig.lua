@@ -124,6 +124,18 @@ return {
       end,
     })
 
+    -- configure clangd server
+    lspconfig["clangd"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    -- configure arduino server // needs clangd too
+    lspconfig["arduino_language_server"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
     -- configure prisma orm server
     lspconfig["prismals"].setup({
       capabilities = capabilities,
@@ -169,6 +181,20 @@ return {
           },
         },
       },
+    })
+
+    local fqbn = "arduino:avr:uno"
+    lspconfig.arduino_language_server.setup({
+      cmd = {
+        "arduino-language-server",
+        "-cli-config",
+        "~/.arduinoIDE/arduino-cli.yaml",
+        "-fqbn",
+        fqbn,
+      },
+
+      on_attach = on_attach,
+      --capabilities = capabilities,
     })
   end,
 }
