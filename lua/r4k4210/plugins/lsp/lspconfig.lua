@@ -89,19 +89,6 @@ return {
       on_attach = on_attach,
     })
 
-    -- require("mason-lspconfig").setup_handlers({
-    --   function(client)
-    --     if client.name == "tsserver" then
-    --       client.name = "ts_ls"
-    --
-    --       lspconfig[client.name].setup({
-    --         capabilities = capabilities,
-    --         on_attach = on_attach,
-    --       })
-    --     end
-    --   end,
-    -- })
-
     -- configure typescript server with plugin
     lspconfig["ts_ls"].setup({
       capabilities = capabilities,
@@ -171,6 +158,11 @@ return {
 
     -- configure python server
     lspconfig["pyright"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    lspconfig["black"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
