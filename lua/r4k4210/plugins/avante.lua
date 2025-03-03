@@ -3,11 +3,7 @@ return {
   event = "VeryLazy",
   lazy = false,
   version = false, -- set this to "*" if you want to always pull the latest change, false to update on release
-  opts = {
-    -- add any opts here
-  },
-  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-  build = "make",
+  build = "make", -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
   dependencies = {
     "stevearc/dressing.nvim",
@@ -43,4 +39,32 @@ return {
       ft = { "markdown", "Avante" },
     },
   },
+  config = function()
+    -- Basic setup with default options
+    require("avante").setup({
+      -- add any options here
+    })
+
+    -- Create autocmd for toggling custom prompt
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "ToggleMyPrompt",
+      callback = function()
+        -- Load the system prompt from an external file
+        local prompt_file = vim.fn.stdpath("config") .. "/lua/r4k4210/llm/system_prompt.lua"
+        local ok, system_prompt = pcall(dofile, prompt_file)
+
+        if ok and system_prompt then
+          require("avante.config").override({ system_prompt = system_prompt })
+          vim.notify("Custom system prompt loaded", vim.log.levels.INFO)
+        else
+          vim.notify("Failed to load system prompt from file", vim.log.levels.ERROR)
+        end
+      end,
+    })
+
+    -- Set up keymap for toggling the prompt
+    vim.keymap.set("n", "<leader>am", function()
+      vim.api.nvim_exec_autocmds("User", { pattern = "ToggleMyPrompt" })
+    end, { desc = "avante: toggle my prompt" })
+  end,
 }
