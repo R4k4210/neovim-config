@@ -13,8 +13,6 @@ return {
       update_in_insert = false,
       severity_sort = false,
     })
-    -- import lspconfig plugin
-    local lspconfig = require("lspconfig")
 
     -- import cmp-nvim-lsp plugin
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
@@ -78,41 +76,59 @@ return {
       vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
     end
 
-    -- configure html server
-    lspconfig["html"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
+    --- LSP setup with vim.lsp.config (Neovim 0.11+)
+    local setup = function(server, config)
+      vim.lsp.config(
+        server,
+        vim.tbl_extend("force", {
+          capabilities = capabilities,
+          on_attach = on_attach,
+        }, config or {})
+      )
+    end
 
-    lspconfig["eslint"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
+    setup("html")
+    setup("eslint")
+    setup("ts_ls")
+    setup("cssls")
+    setup("tailwindcss")
+    setup("prismals")
+    setup("graphql", {
+      filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
     })
-
-    -- configure typescript server with plugin
-    lspconfig["ts_ls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
+    setup("emmet_ls", {
+      filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
     })
-
-    -- configure css server
-    lspconfig["cssls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
+    setup("pyright")
+    setup("black")
+    setup("clangd")
+    setup("arduino_language_server", {
+      cmd = {
+        "arduino-language-server",
+        "-cli-config",
+        "~/.arduinoIDE/arduino-cli.yaml",
+        "-fqbn",
+        "arduino:avr:uno",
+      },
     })
-
-    -- configure tailwindcss server
-    lspconfig["tailwindcss"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
+    setup("lua_ls", {
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { "vim" },
+          },
+          workspace = {
+            library = {
+              [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+              [vim.fn.stdpath("config") .. "/lua"] = true,
+            },
+          },
+        },
+      },
     })
-
-    -- configure svelte server
-    lspconfig["svelte"].setup({
-      capabilities = capabilities,
+    setup("svelte", {
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
-
         vim.api.nvim_create_autocmd("BufWritePost", {
           pattern = { "*.js", "*.ts" },
           callback = function(ctx)
@@ -124,82 +140,25 @@ return {
       end,
     })
 
-    -- configure clangd server
-    lspconfig["clangd"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
+    local servers = {
+      "html",
+      "eslint",
+      "ts_ls",
+      "cssls",
+      "tailwindcss",
+      "prismals",
+      "graphql",
+      "emmet_ls",
+      "pyright",
+      "black",
+      "clangd",
+      "arduino_language_server",
+      "lua_ls",
+      "svelte",
+    }
 
-    -- configure arduino server // needs clangd too
-    lspconfig["arduino_language_server"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure prisma orm server
-    lspconfig["prismals"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure graphql language server
-    lspconfig["graphql"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
-    })
-
-    -- configure emmet language server
-    lspconfig["emmet_ls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
-    })
-
-    -- configure python server
-    lspconfig["pyright"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    lspconfig["black"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure lua server (with special settings)
-    lspconfig["lua_ls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = { -- custom settings for lua
-        Lua = {
-          -- make the language server recognize "vim" global
-          diagnostics = {
-            globals = { "vim" },
-          },
-          workspace = {
-            -- make language server aware of runtime files
-            library = {
-              [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-              [vim.fn.stdpath("config") .. "/lua"] = true,
-            },
-          },
-        },
-      },
-    })
-
-    local fqbn = "arduino:avr:uno"
-    lspconfig.arduino_language_server.setup({
-      cmd = {
-        "arduino-language-server",
-        "-cli-config",
-        "~/.arduinoIDE/arduino-cli.yaml",
-        "-fqbn",
-        fqbn,
-      },
-
-      on_attach = on_attach,
-      --capabilities = capabilities,
-    })
+    for _, name in ipairs(servers) do
+      vim.lsp.enable(name)
+    end
   end,
 }

@@ -41,17 +41,26 @@ return {
   config = function()
     -- Basic setup with default options
     require("avante").setup({
-      ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
-      provider = "claude", -- Default provider for Aider mode and planning phase in Cursor Planning Mode
+      ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | "openrouter" | string
+      provider = "openai", -- Using OpenRouter as the default provider
       -- WARNING: Setting `auto_suggestions_provider = "copilot"` can be expensive due to frequent API requests
-      auto_suggestions_provider = "claude",
       cursor_applying_provider = nil, -- Provider for applying phase in Cursor Planning Mode (defaults to provider)
-      claude = {
-        endpoint = "https://api.anthropic.com",
-        model = "claude-3-5-sonnet-20241022",
-        temperature = 0,
+      openai = {
+        endpoint = "https://openrouter.ai/api/v1",
+        api_key_name = "OPENROUTER_API_KEY",
+        model = "anthropic/claude-3.5-sonnet",
+        temperature = 0.0,
         max_tokens = 4096,
       },
+      -- vendors = {
+      --   openrouter = {
+      --     endpoint = "https://openrouter.ai/api/v1",
+      --     api_key_name = "OPENROUTER_API_KEY",
+      --     model = "anthropic/claude-3.5-sonnet",
+      --     temperature = 0.0,
+      --     max_tokens = 4096,
+      --   },
+      -- },
       behaviour = {
         auto_suggestions = false, -- Experimental feature
         auto_set_highlight_group = true,
@@ -153,8 +162,10 @@ return {
         -- Apply new system prompt if loading was successful
         if ok and type(system_prompt) == "string" then
           require("avante.config").override({ system_prompt = system_prompt })
+          print("Custom system prompt loaded:\n" .. system_prompt) -- 🔹 Verify if loaded correctly
           vim.notify("Custom system prompt loaded", vim.log.levels.INFO)
         else
+          print("Failed to load system prompt from file")
           vim.notify("Failed to load system prompt from file", vim.log.levels.ERROR)
         end
       end,

@@ -35,20 +35,22 @@ local function biome_config_exists()
   return check_if_files_exists(biome_files)
 end
 
-vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-  pattern = { "*.js", "*.ts", "*.tsx", "*.jsx" },
-  callback = function()
-    if eslint_config_exists() then
-      vim.cmd("EslintFixAll")
-    end
-  end,
-})
+-- Temporally disabled
 
-vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-  pattern = { "*.js", "*.ts", "*.tsx", "*.jsx" },
-  callback = function()
-    if biome_config_exists() then
-      vim.cmd("!biome check % --write")
-    end
-  end,
-})
+-- vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+--   pattern = { "*.js", "*.ts", "*.tsx", "*.jsx" },
+--   callback = function()
+--     if eslint_config_exists() then
+--       vim.cmd("EslintFixAll")
+--     end
+--   end,
+-- })
+--
+-- vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+--   pattern = { "*.js", "*.ts", "*.tsx", "*.jsx" },
+--   callback = function()
+--     if biome_config_exists() then
+--       vim.cmd("!biome check % --write")
+--     end
+--   end,
+-- })

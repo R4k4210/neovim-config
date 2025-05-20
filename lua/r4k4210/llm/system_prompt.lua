@@ -48,6 +48,7 @@ React/Next.js
 - Use dynamic loading for non-critical components.
 - Optimize images: WebP format, size data, lazy loading.
 - Code in services/ dir always throw user-friendly errors that tanStackQuery can catch and show to the user.
+- ALWAY create a div with className="container" that wraps every component.
 
 Key Conventions
 
