@@ -82,11 +82,11 @@ keymap.set("n", "<M-Up>", "<cmd>m .-2<CR>", { desc = "move line up" })
 keymap.set("n", "<M-Down>", "<cmd>m .+1<CR>", { desc = "move line down" })
 
 -- Diffview // overrides default diff
-keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", { desc = "DiffviewOpen" })
-keymap.set("n", "<leader>gc", "<cmd>DiffviewClose<CR>", { desc = "DiffviewClose" })
+-- keymap.set("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", { desc = "DiffviewOpen" })
+-- keymap.set("n", "<leader>gc", "<cmd>DiffviewClose<CR>", { desc = "DiffviewClose" })
 
 -- Lazygit
-keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "Open Lazygit" })
+-- keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "Open Lazygit" })
 
 -- Gitsigns
 keymap.set("n", "<leader>gs", "<cmd>Gitsigns stage_hunk<CR>", { desc = "Git stage hunk" })

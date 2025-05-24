@@ -42,25 +42,45 @@ return {
     -- Basic setup with default options
     require("avante").setup({
       ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | "openrouter" | string
-      provider = "openai", -- Using OpenRouter as the default provider
+      provider = "openrouter", -- Using OpenRouter as the default provider
       -- WARNING: Setting `auto_suggestions_provider = "copilot"` can be expensive due to frequent API requests
       cursor_applying_provider = nil, -- Provider for applying phase in Cursor Planning Mode (defaults to provider)
-      openai = {
-        endpoint = "https://openrouter.ai/api/v1",
-        api_key_name = "OPENROUTER_API_KEY",
-        model = "anthropic/claude-3.5-sonnet",
-        temperature = 0.0,
-        max_tokens = 4096,
+      vendors = {
+        openrouter = {
+          __inherited_from = "openai",
+          endpoint = "https://openrouter.ai/api/v1",
+          api_key_name = "OPENROUTER_API_KEY",
+          model = "anthropic/claude-3.5-sonnet", -- Modelo más reciente y potente de Claude
+          temperature = 0.0,
+          max_tokens = 4096,
+          headers = {
+            ["HTTP-Referer"] = "https://github.com/yetone/avante.nvim",
+            ["X-Title"] = "Avante.nvim",
+          },
+          -- parse_response = function(data_stream, event_state, opts)
+          --   if event_state == "done" then
+          --     opts.on_complete()
+          --     return
+          --   end
+          --
+          --   if not data_stream or data_stream == "" then
+          --     return
+          --   end
+          --
+          --   local ok, json = pcall(vim.json.decode, data_stream)
+          --   if not ok or not json then
+          --     return
+          --   end
+          --
+          --   -- OpenRouter con Claude usa una estructura diferente
+          --   local delta = json.message and json.message.content or
+          --                (json.choices and json.choices[1] and json.choices[1].message and json.choices[1].message.content)
+          --   if delta then
+          --     opts.on_chunk(delta)
+          --   end
+          -- end,
+        },
       },
-      -- vendors = {
-      --   openrouter = {
-      --     endpoint = "https://openrouter.ai/api/v1",
-      --     api_key_name = "OPENROUTER_API_KEY",
-      --     model = "anthropic/claude-3.5-sonnet",
-      --     temperature = 0.0,
-      --     max_tokens = 4096,
-      --   },
-      -- },
       behaviour = {
         auto_suggestions = false, -- Experimental feature
         auto_set_highlight_group = true,
