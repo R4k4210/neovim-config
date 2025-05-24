@@ -1,5 +1,8 @@
 return {
   "folke/snacks.nvim",
+  dependencies = {
+    "nvim-tree/nvim-web-devicons",
+  },
   priority = 1000,
   lazy = false,
   keys = require("r4k4210.core.snacks-keymaps"),
@@ -37,12 +40,9 @@ return {
       },
       sections = {
         { section = "header" },
-        {
-          section = "keys",
-          indent = 1,
-          padding = 1,
-        },
-        { section = "recent_files", icon = " ", title = "Recent Files", indent = 3, padding = 2 },
+        { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+        { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+        { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
         { section = "startup" },
       },
     },
@@ -57,6 +57,39 @@ return {
     statuscolumn = { enabled = true },
     words = { enabled = true },
     rename = { enabled = true },
+    session = {
+      enabled = true,
+      autosave = true,
+      autorestore = true,
+    },
+    image = {
+      enabled = true,
+      doc = {
+        float = true, -- show image on cursor hover
+        inline = false, -- show image inline
+        max_width = 50,
+        max_height = 30,
+        wo = {
+          wrap = false,
+        },
+      },
+      convert = {
+        notify = true,
+        command = "magick",
+      },
+      img_dirs = {
+        "img",
+        "images",
+        "assets",
+        "static",
+        "public",
+        "media",
+        "attachments",
+        "Archives/All-Vault-Images/",
+        "~/Library",
+        "~/Downloads",
+      },
+    },
     zen = {
       enabled = true,
       toggles = {
@@ -72,14 +105,6 @@ return {
     },
   },
   init = function()
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "OilActionsPost",
-      callback = function(event)
-        if event.data.actions.type == "move" then
-          Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
-        end
-      end,
-    })
     vim.api.nvim_create_autocmd("User", {
       pattern = "VeryLazy",
       callback = function()
