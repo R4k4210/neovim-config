@@ -34,6 +34,15 @@ return {
         notifier = {
           enabled = true,
           timeout = 3000,
+          filter = function(msg, level, opts)
+            local ft = vim.bo.filetype or ""
+
+            if string.find(ft, "^Avante") then
+              return false
+            end
+
+            return true
+          end,
         },
         quickfile = { enabled = true },
         scope = { enabled = true },
