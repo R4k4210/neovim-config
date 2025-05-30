@@ -27,19 +27,17 @@ return {
         group = "Buffers",
         expand = function()
           return require("which-key.extras").expand.buf()
-        end
+        end,
       },
-      { "<leader>c", desc = "Code Actions" },
-      { "<leader>f", desc = "Telescope" },
+      { "<leader>c", desc = "Rename and color" },
+      { "<leader>f", desc = "Picker" },
       { "<leader>g", desc = "Git" },
       { "<leader>m", desc = "LazyDocker and format" },
       { "<leader>n", hidden = true },
       { "<leader>p", hidden = true },
-      { "<leader>r", desc = "LSP" },
-      { "<leader>s", desc = "Windows Split" },
-      { "<leader>t", desc = "Tabs" },
+      { "<leader>a", desc = "Avante" },
+      { "<leader>s", desc = "Filters (Todo, Symbols, etc)" },
       { "<leader>u", desc = "UI" },
-      { "<leader>z", desc = "Colorhh Picker" },
     })
   end,
 }
