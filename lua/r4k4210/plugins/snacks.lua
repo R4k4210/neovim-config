@@ -12,6 +12,7 @@ return {
           layout = require("r4k4210.plugins.snacks.layout")("sidebar"),
           enabled = true,
           actions = require("trouble.sources.snacks").actions, -- integración con trouble
+          hidden = true,
           win = {
             input = {
               keys = {
