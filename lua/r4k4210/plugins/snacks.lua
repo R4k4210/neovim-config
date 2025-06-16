@@ -9,7 +9,7 @@ return {
         bigfile = { enabled = true },
         dashboard = require("r4k4210.plugins.snacks.dashboard"),
         picker = {
-          layout = require("r4k4210.plugins.snacks.layout")("sidebar"),
+          layout = require("r4k4210.plugins.snacks.layout")("vertical"),
           enabled = true,
           actions = require("trouble.sources.snacks").actions, -- integración con trouble
           hidden = true,
