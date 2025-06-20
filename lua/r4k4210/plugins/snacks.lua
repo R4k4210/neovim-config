@@ -1,3 +1,7 @@
+local dashboard = require("r4k4210.plugins.snacks.dashboard")
+local layout = require("r4k4210.plugins.snacks.layout")("vertical")
+local keymaps = require("r4k4210.plugins.snacks.keymaps")
+
 return {
   {
     "folke/snacks.nvim",
@@ -7,9 +11,9 @@ return {
     opts = function(_, opts)
       return vim.tbl_deep_extend("force", opts or {}, {
         bigfile = { enabled = true },
-        dashboard = require("r4k4210.plugins.snacks.dashboard"),
+        dashboard = dashboard,
         picker = {
-          layout = require("r4k4210.plugins.snacks.layout")("vertical"),
+          layout = layout,
           enabled = true,
           actions = require("trouble.sources.snacks").actions, -- integración con trouble
           hidden = true,
@@ -57,7 +61,7 @@ return {
         },
       })
     end,
-    keys = require("r4k4210.plugins.snacks.keymaps"),
+    keys = keymaps,
     init = function()
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",

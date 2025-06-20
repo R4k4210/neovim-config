@@ -1,3 +1,9 @@
+local providers = require("r4k4210.plugins.avante.providers")
+local rag_service = require("r4k4210.plugins.avante.rag_service")
+local mappings = require("r4k4210.plugins.avante.mappings")
+local windows = require("r4k4210.plugins.avante.windows")
+local behaviour = require("r4k4210.plugins.avante.behaviour")
+
 return {
   "yetone/avante.nvim",
   event = "VeryLazy",
@@ -38,27 +44,26 @@ return {
     },
   },
   config = function()
-    -- Basic setup with default options
     require("avante").setup({
+      -- system_prompt as function ensures LLM always has latest MCP server state
+      -- This is evaluated for every message, even in existing chats
+      system_prompt = function()
+        local hub = require("mcphub").get_hub_instance()
+        return hub and hub:get_active_servers_prompt() or ""
+      end,
+      -- Using function prevents requiring mcphub before it's loaded
+      custom_tools = function()
+        return {
+          require("mcphub.extensions.avante").mcp_tool(),
+        }
+      end,
+
       -- default_prompt = "default",
       template_dir = vim.fn.stdpath("config") .. "/lua/r4k4210/llm/templates",
       ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | "openrouter" | string
       provider = "openrouter", -- Using OpenRouter as the default provider
 
-      providers = {
-        copilot = false,
-        openrouter = {
-          __inherited_from = "openai",
-          endpoint = "https://openrouter.ai/api/v1",
-          api_key_name = "OPENROUTER_API_KEY",
-          model = "anthropic/claude-sonnet-4",
-          -- Configuraciones específicas para evitar problemas con edit mode
-          timeout = 60000, -- Timeout más largo para edit mode
-          max_tokens = 8192, -- Límite de tokens para evitar respuestas muy largas
-          -- Tools específicamente habilitadas para edit mode
-          -- disabled_tools = {}, -- Mantener todas las herramientas habilitadas
-        },
-      },
+      providers = providers,
       ---Configuración dual_boost experimental
       dual_boost = {
         enabled = false, -- Deshabilitado por defecto
@@ -71,36 +76,8 @@ return {
         provider = "tavily", -- tavily, serpapi, searchapi, google, kagi, brave, or searxng
         proxy = nil, -- proxy support, e.g., http://127.0.0.1:7890
       },
-      rag_service = {
-        enabled = false, -- Habilitar el servicio RAG
-        host_mount = os.getenv("HOME"), -- Ruta de montaje del host para el servicio RAG
-        runner = "docker", -- Runner para el servicio RAG (docker o nix)
-        llm = {
-          provider = "openrouter",
-          endpoint = "https://openrouter.ai/api/v1",
-          api_key_name = "OPENROUTER_API_KEY",
-          model = "anthropic/claude-3-sonnet",
-        },
-        embed = {
-          provider = "openai",
-          endpoint = "https://api.openai.com/v1",
-          api_key_name = "OPENAI_API_KEY",
-          model = "text-embedding-3-large",
-        },
-        docker_extra_args = "", -- Argumentos extra para el comando docker
-      },
-      behaviour = {
-        auto_suggestions = false, -- Experimental feature
-        auto_set_highlight_group = true,
-        auto_set_keymaps = true,
-        auto_apply_diff_after_generation = false,
-        support_paste_from_clipboard = false,
-        minimize_diff = true, -- Removes unchanged lines when applying a code block
-        enable_token_counting = false, -- Enables token counting (default: true) | Esto previene que ande lento al escribir
-        enable_cursor_planning_mode = true, -- Habilitar Cursor Planning Mode para mejor compatibilidad
-        auto_approve_tool_permissions = false, -- Mostrar prompts de permisos para herramientas
-        streaming = false, -- CRÍTICO: Deshabilitar streaming para evitar crashes con OpenRouter
-      },
+      rag_service = rag_service,
+      behaviour = behaviour,
       history = {
         max_tokens = 50000, -- Límite de tokens para el historial (reducido)
         storage_path = vim.fn.stdpath("state") .. "/avante", -- Donde guardar el historial
@@ -117,71 +94,9 @@ return {
         ignore_patterns = { "%.env.*", "^%.env$", "%.git", "%.worktree", "__pycache__", "node_modules" }, -- ignore files matching these
         negate_patterns = {}, -- negate ignore files matching these.
       },
-      mappings = {
-        --- @class AvanteConflictMappings
-        diff = {
-          ours = "co",
-          theirs = "ct",
-          all_theirs = "ca",
-          both = "cb",
-          cursor = "cc",
-          next = "]x",
-          prev = "[x",
-        },
-        suggestion = {
-          accept = "<M-l>",
-          next = "<M-]>",
-          prev = "<M-[>",
-          dismiss = "<C-]>",
-        },
-        jump = {
-          next = "]]",
-          prev = "[[",
-        },
-        submit = {
-          normal = "<CR>",
-          insert = "<C-s>",
-        },
-        sidebar = {
-          apply_all = "A",
-          apply_cursor = "a",
-          switch_windows = "<Tab>",
-          reverse_switch_windows = "<S-Tab>",
-        },
-        confirm = {
-          focus_window = "<C-w>f",
-          code = "c",
-          resp = "r",
-          input = "i",
-        },
-      },
+      mappings = mappings,
       hints = { enabled = true },
-      windows = {
-        ---@type "right" | "left" | "top" | "bottom"
-        position = "left", -- Sidebar position
-        wrap = true, -- Similar to vim.o.wrap
-        width = 30, -- Default width percentage
-        sidebar_header = {
-          enabled = true, -- Enables/disables sidebar header
-          align = "center", -- Title alignment: left, center, or right
-          rounded = true,
-        },
-        input = {
-          prefix = "> ",
-          height = 8, -- Input window height in vertical layout
-        },
-        edit = {
-          border = "rounded",
-          start_insert = true, -- Start in insert mode when opening edit window
-        },
-        ask = {
-          floating = false, -- Opens 'AvanteAsk' prompt in a floating window
-          start_insert = true, -- Start in insert mode when opening ask window
-          border = "rounded",
-          ---@type "ours" | "theirs"
-          focus_on_apply = "ours", -- Which diff to focus on after applying
-        },
-      },
+      windows = windows,
       highlights = {
         ---@type AvanteConflictHighlights
         diff = {
