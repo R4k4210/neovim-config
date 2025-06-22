@@ -20,49 +20,10 @@ return {
     local keymap = vim.keymap -- for conciseness
 
     local opts = { noremap = true, silent = true }
-    local on_attach = function(client, bufnr)
+    local on_attach = function(_, bufnr)
       opts.buffer = bufnr
-
-      -- set keybinds
-      -- opts.desc = "Show LSP references"
-      -- keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
-      --
-      -- opts.desc = "Go to declaration"
-      -- keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
-      --
-      -- opts.desc = "Show LSP definitions"
-      -- keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
-      --
-      -- opts.desc = "Show LSP implementations"
-      -- keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
-      --
-      -- opts.desc = "Show LSP type definitions"
-      -- keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
-      --
-      -- opts.desc = "See available code actions"
-      -- keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
-      --
-      -- -- rename with inc-rename (works better)
-      -- -- opts.desc = "Smart rename"
-      -- -- keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
-      --
-      -- opts.desc = "Show buffer diagnostics"
-      -- keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
-      --
       opts.desc = "Show line diagnostics"
       keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
-      --
-      -- opts.desc = "Go to previous diagnostic"
-      -- keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
-      --
-      -- opts.desc = "Go to next diagnostic"
-      -- keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
-      --
-      -- opts.desc = "Show documentation for what is under cursor"
-      -- keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
-      --
-      -- opts.desc = "Restart LSP"
-      -- keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
     end
 
     -- used to enable autocompletion (assign to every lsp server config)
@@ -149,25 +110,45 @@ return {
       end,
     })
 
-    local servers = {
-      "html",
-      "eslint",
-      "ts_ls",
-      "cssls",
-      "tailwindcss",
-      "prismals",
-      "graphql",
-      "emmet_ls",
-      "pyright",
-      "black",
-      "clangd",
-      "arduino_language_server",
-      "lua_ls",
-      "svelte",
+    -- Conditional LSP loading based on filetype for better performance
+    local conditional_servers = {
+      javascript = { "ts_ls", "eslint" },
+      typescript = { "ts_ls", "eslint" },
+      javascriptreact = { "ts_ls", "eslint" },
+      typescriptreact = { "ts_ls", "eslint" },
+      html = { "html", "emmet_ls", "tailwindcss" },
+      css = { "cssls", "tailwindcss" },
+      scss = { "cssls", "tailwindcss" },
+      sass = { "cssls", "tailwindcss" },
+      less = { "cssls", "tailwindcss" },
+      python = { "pyright" },
+      lua = { "lua_ls" },
+      c = { "clangd" },
+      cpp = { "clangd" },
+      arduino = { "arduino_language_server" },
+      svelte = { "svelte", "ts_ls", "eslint" },
+      graphql = { "graphql" },
+      prisma = { "prismals" },
     }
 
-    for _, name in ipairs(servers) do
-      vim.lsp.enable(name)
+    -- Enable LSP servers conditionally based on filetype
+    vim.api.nvim_create_autocmd("FileType", {
+      callback = function(args)
+        local filetype = args.match
+        local servers_for_ft = conditional_servers[filetype]
+
+        if servers_for_ft then
+          for _, server in ipairs(servers_for_ft) do
+            vim.lsp.enable(server)
+          end
+        end
+      end,
+    })
+
+    -- Always enable essential servers for common usage
+    local always_enabled = { "lua_ls" } -- Lua for Neovim config
+    for _, server in ipairs(always_enabled) do
+      vim.lsp.enable(server)
     end
   end,
 }

@@ -45,19 +45,6 @@ return {
   },
   config = function()
     require("avante").setup({
-      -- system_prompt as function ensures LLM always has latest MCP server state
-      -- This is evaluated for every message, even in existing chats
-      system_prompt = function()
-        local hub = require("mcphub").get_hub_instance()
-        return hub and hub:get_active_servers_prompt() or ""
-      end,
-      -- Using function prevents requiring mcphub before it's loaded
-      custom_tools = function()
-        return {
-          require("mcphub.extensions.avante").mcp_tool(),
-        }
-      end,
-
       -- default_prompt = "default",
       template_dir = vim.fn.stdpath("config") .. "/lua/r4k4210/llm/templates",
       ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | "openrouter" | string
@@ -79,15 +66,15 @@ return {
       rag_service = rag_service,
       behaviour = behaviour,
       history = {
-        max_tokens = 50000, -- Límite de tokens para el historial (reducido)
+        max_tokens = 15000, -- Límite de tokens para el historial (optimizado para rendimiento)
         storage_path = vim.fn.stdpath("state") .. "/avante", -- Donde guardar el historial
-        max_files = 5, -- Máximo número de archivos de historial (reducido)
+        max_files = 5, -- Máximo número de archivos de historial
       },
       -- Configuración para limitar el contexto del RAG
       context = {
         max_files = 5, -- Máximo número de archivos a incluir en el contexto
         max_lines_per_file = 100, -- Máximo número de líneas por archivo
-        max_total_tokens = 100000, -- Límite total de tokens para el contexto
+        max_total_tokens = 30000, -- Límite total de tokens para el contexto (optimizado)
       },
       --- @class AvanteRepoMapConfig
       repo_map = {
@@ -127,14 +114,33 @@ return {
         provider_opts = {},
       },
 
-      -- Herramientas deshabilitadas si es necesario
-      disabled_tools = {}, -- Lista de herramientas a deshabilitar, ej: {"python", "bash"}
+      -- system_prompt as function ensures LLM always has latest MCP server state
+      -- This is evaluated for every message, even in existing chats
+      system_prompt = function()
+        local hub = require("mcphub").get_hub_instance()
+        return hub and hub:get_active_servers_prompt() or ""
+      end,
+      -- Using function prevents requiring mcphub before it's loaded
+      custom_tools = function()
+        return {
+          require("mcphub.extensions.avante").mcp_tool(),
+        }
+      end,
 
-      -- Configuración de tools personalizada
-      custom_tools = {
-        -- Aquí puedes agregar herramientas personalizadas en el futuro
+      disabled_tools = { -- Lista de herramientas a deshabilitar, ej: {"python", "bash"}
+        "list_files", -- Built-in file operations
+        "search_files",
+        "read_file",
+        "create_file",
+        "rename_file",
+        "delete_file",
+        "create_dir",
+        "rename_dir",
+        "delete_dir",
+        "bash", -- Built-in terminal access
       },
     })
+
 
     -- -- Autocommand to toggle custom system prompt
     -- vim.api.nvim_create_autocmd("User", {

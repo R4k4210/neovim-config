@@ -55,7 +55,8 @@ return {
           handler = function()
             vim.o.showmode = false
             vim.o.ruler = false
-            vim.o.laststatus = 0
+            -- visibility is handlded by lualine
+            -- vim.o.laststatus = 0
             vim.o.showcmd = false
 
             -- 🧠 Autocierre si Neo-tree es el único buffer visible
@@ -70,7 +71,8 @@ return {
           handler = function()
             vim.o.showmode = true
             vim.o.ruler = true
-            vim.o.laststatus = 2
+            -- visibility is handlded by lualine
+            -- vim.o.laststatus = 2
             vim.o.showcmd = true
           end,
         },

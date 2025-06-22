@@ -1,60 +1,72 @@
 return {
-  "williamboman/mason.nvim",
+  -- Mason: Portable package manager for Neovim
+  "mason-org/mason.nvim",
   dependencies = {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
   },
   config = function()
-    -- import mason
+    -- Import Mason plugins
     local mason = require("mason")
-
-    -- import mason-lspconfig
     local mason_lspconfig = require("mason-lspconfig")
-
     local mason_tool_installer = require("mason-tool-installer")
 
-    -- enable mason and configure icons
+    -- Configure Mason with improved UI
     mason.setup({
       ui = {
+        -- Enhanced icons for better visual feedback
         icons = {
-          package_installed = "✓",
-          package_pending = "➜",
-          package_uninstalled = "✗",
+          package_installed = "◍",
+          package_pending = "◍",
+          package_uninstalled = "◍",
         },
+        border = "rounded",
+        width = 0.8,
+        height = 0.9,
       },
+      -- Performance settings
+      max_concurrent_installers = 4,
+      log_level = vim.log.levels.INFO,
     })
 
+    -- Configure Mason-LSPConfig with v2.0.0 settings
     mason_lspconfig.setup({
-      -- list of servers for mason to install
+      -- Servers to automatically install
       ensure_installed = {
-        "ts_ls",
-        "html",
-        "cssls",
-        "tailwindcss",
-        "svelte",
-        "lua_ls",
-        "graphql",
-        "emmet_ls",
-        "prismals",
-        "pyright",
-        "eslint",
-        "clangd",
-        "arduino_language_server",
+        "ts_ls", -- TypeScript/JavaScript
+        "html", -- HTML
+        "cssls", -- CSS
+        "tailwindcss", -- Tailwind CSS
+        "svelte", -- Svelte
+        "lua_ls", -- Lua
+        "graphql", -- GraphQL
+        "emmet_ls", -- Emmet
+        "prismals", -- Prisma
+        "pyright", -- Python
+        "eslint", -- ESLint
+        "clangd", -- C/C++
+        "arduino_language_server", -- Arduino
       },
-      -- auto-install configured servers (with lspconfig)
-      automatic_installation = true, -- not the same as ensure_installed
+      -- Auto-enable installed servers (v2.0.0 feature)
+      automatic_enable = true, -- Updated from automatic_installation
     })
 
+    -- Configure Mason Tool Installer for formatters and linters
     mason_tool_installer.setup({
       ensure_installed = {
-        "prettier", -- prettier formatter
-        "stylua", -- lua formatter
-        "isort", -- python formatter
-        "black", -- python formatter
-        "pylint", -- python linter
-        "eslint", -- js linter
-        "prettierd",
+        -- Formatters
+        "prettier", -- JavaScript/TypeScript/HTML/CSS
+        "prettierd", -- Faster prettier daemon
+        "stylua", -- Lua formatter
+        "isort", -- Python import sorter
+        "black", -- Python formatter
+        -- Linters
+        "eslint", -- JavaScript/TypeScript linter
+        "pylint", -- Python linter
       },
+      -- Auto-update tools
+      auto_update = false,
+      run_on_start = true,
     })
   end,
 }
