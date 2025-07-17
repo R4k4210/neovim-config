@@ -54,3 +54,6 @@ end
 --     end
 --   end,
 -- })
+
+-- Los highlights de Avante ahora se configuran en lua/r4k4210/plugins/avante.lua
+-- usando la configuración nativa del plugin para mejor rendimiento y mantenimiento

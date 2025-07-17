@@ -75,6 +75,15 @@ return {
         ["<C-Space"] = cmp.mapping.complete(), -- show completion suggestions
         ["<C-e>"] = cmp.mapping.abort(), -- close completion window
         ["<CR>"] = cmp.mapping.confirm({ select = false }),
+        -- Deshabilitar <C-y> para que Codeium pueda usarlo
+        ["<C-y>"] = cmp.mapping(function(fallback)
+          -- Si el menú de cmp está visible, cerrar y pasar el control a Codeium
+          if cmp.visible() then
+            cmp.abort()
+          end
+          -- Pasar el control a Codeium o al mapping por defecto
+          fallback()
+        end, { "i", "c" }),
         ["<Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_next_item()
@@ -124,6 +133,7 @@ return {
 
       -- sources for autocompletion
       sources = cmp.config.sources({
+        { name = "codeium", priority = 800 },
         { name = "nvim_lsp", priority = 1000 },
         { name = "nvim_lsp_signature_help", priority = 750 },
         { name = "luasnip", priority = 500 },

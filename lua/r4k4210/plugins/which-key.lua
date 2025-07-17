@@ -1,4 +1,5 @@
 return {
+  -- Which-key: Key binding help popup
   "folke/which-key.nvim",
   event = "VeryLazy",
   init = function()
@@ -6,40 +7,79 @@ return {
     vim.o.timeoutlen = 300
   end,
   opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-  },
-  config = function()
-    local wk = require("which-key")
-
-    wk.setup({
-      plugins = {
-        presets = {
-          operators = false,
-        },
+    -- Modern preset for better visual experience
+    preset = "modern",
+    -- Delay before showing the popup
+    delay = function(ctx)
+      return ctx.plugin and 0 or 200
+    end,
+    -- Configure triggers manually to avoid conflicts
+    triggers = {
+      { "<leader>", mode = { "n", "v" } },
+    },
+    -- Enhanced plugins configuration
+    plugins = {
+      marks = true,
+      registers = true,
+      spelling = {
+        enabled = true,
+        suggestions = 20,
       },
-    })
-
-    wk.add({
+      presets = {
+        operators = false, -- Disable operator help
+        motions = true,
+        text_objects = true,
+        windows = true,
+        nav = true,
+        z = true,
+        g = true,
+      },
+    },
+    -- Better window configuration
+    win = {
+      border = "rounded",
+      padding = { 1, 2 },
+      title = true,
+      title_pos = "center",
+    },
+    -- Icon configuration
+    icons = {
+      breadcrumb = "»",
+      separator = "➜",
+      group = "+",
+      mappings = true,
+      colors = true,
+    },
+    -- Key mappings specification
+    spec = {
       {
         "<leader>b",
         group = "Buffers",
+        icon = "󰓩",
         expand = function()
           return require("which-key.extras").expand.buf()
-        end
+        end,
       },
-      { "<leader>c", desc = "Code Actions" },
-      { "<leader>f", desc = "Telescope" },
-      { "<leader>g", desc = "Git" },
-      { "<leader>m", desc = "LazyDocker and format" },
+      { "<leader>c", group = "Colors & Rename", icon = "🎨" },
+      { "<leader>f", group = "Find & Files", icon = "󰈞" },
+      { "<leader>g", group = "Git", icon = "󰊢" },
+      { "<leader>m", group = "Tools & Format", icon = "🔧" },
+      { "<leader>a", group = "Avante AI", icon = "🤖" },
+      { "<leader>s", group = "Search & Symbols", icon = "󰍉" },
+      { "<leader>t", group = "Terminal", icon = "󰆍" },
+      { "<leader>u", group = "UI Toggles", icon = "󰍉" },
+      -- Hidden mappings
       { "<leader>n", hidden = true },
       { "<leader>p", hidden = true },
-      { "<leader>r", desc = "LSP" },
-      { "<leader>s", desc = "Windows Split" },
-      { "<leader>t", desc = "Tabs" },
-      { "<leader>u", desc = "UI" },
-      { "<leader>z", desc = "Colorhh Picker" },
-    })
-  end,
+    },
+  },
+  keys = {
+    {
+      "<leader>?",
+      function()
+        require("which-key").show({ global = false })
+      end,
+      desc = "Buffer Local Keymaps (which-key)",
+    },
+  },
 }

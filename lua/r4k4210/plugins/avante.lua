@@ -1,3 +1,9 @@
+local providers = require("r4k4210.plugins.avante.providers")
+local rag_service = require("r4k4210.plugins.avante.rag_service")
+local mappings = require("r4k4210.plugins.avante.mappings")
+local windows = require("r4k4210.plugins.avante.windows")
+local behaviour = require("r4k4210.plugins.avante.behaviour")
+
 return {
   "yetone/avante.nvim",
   event = "VeryLazy",
@@ -11,7 +17,6 @@ return {
     --- Optional dependencies
     "hrsh7th/nvim-cmp", -- Autocompletion for Avante commands and mentions
     "nvim-tree/nvim-web-devicons", -- Icons for UI
-    "zbirenbaum/copilot.lua", -- Used when providers='copilot'
     {
       -- Support for image pasting
       "HakonHarnes/img-clip.nvim",
@@ -39,97 +44,39 @@ return {
     },
   },
   config = function()
-    -- Basic setup with default options
     require("avante").setup({
+      -- default_prompt = "default",
+      template_dir = vim.fn.stdpath("config") .. "/lua/r4k4210/llm/templates",
       ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | "openrouter" | string
-      provider = "openai", -- Using OpenRouter as the default provider
-      -- WARNING: Setting `auto_suggestions_provider = "copilot"` can be expensive due to frequent API requests
-      cursor_applying_provider = nil, -- Provider for applying phase in Cursor Planning Mode (defaults to provider)
-      openai = {
-        endpoint = "https://openrouter.ai/api/v1",
-        api_key_name = "OPENROUTER_API_KEY",
-        model = "anthropic/claude-3.5-sonnet",
-        temperature = 0.0,
-        max_tokens = 4096,
+      provider = "openrouter", -- Using OpenRouter as the default provider
+
+      providers = providers,
+      -- Removed dual_boost configuration to prevent conflicts
+      web_search_engine = {
+        provider = "tavily", -- tavily, serpapi, searchapi, google, kagi, brave, or searxng
+        proxy = nil, -- proxy support, e.g., http://127.0.0.1:7890
       },
-      -- vendors = {
-      --   openrouter = {
-      --     endpoint = "https://openrouter.ai/api/v1",
-      --     api_key_name = "OPENROUTER_API_KEY",
-      --     model = "anthropic/claude-3.5-sonnet",
-      --     temperature = 0.0,
-      --     max_tokens = 4096,
-      --   },
-      -- },
-      behaviour = {
-        auto_suggestions = false, -- Experimental feature
-        auto_set_highlight_group = true,
-        auto_set_keymaps = true,
-        auto_apply_diff_after_generation = false,
-        support_paste_from_clipboard = false,
-        minimize_diff = true, -- Removes unchanged lines when applying a code block
-        enable_token_counting = true, -- Enables token counting (default: true)
-        enable_cursor_planning_mode = false, -- Enables Cursor Planning Mode (default: false)
+      rag_service = rag_service,
+      behaviour = behaviour,
+      history = {
+        max_tokens = 15000, -- Límite de tokens para el historial (optimizado para rendimiento)
+        storage_path = vim.fn.stdpath("state") .. "/avante", -- Donde guardar el historial
+        max_files = 5, -- Máximo número de archivos de historial
       },
-      mappings = {
-        --- @class AvanteConflictMappings
-        diff = {
-          ours = "co",
-          theirs = "ct",
-          all_theirs = "ca",
-          both = "cb",
-          cursor = "cc",
-          next = "]x",
-          prev = "[x",
-        },
-        suggestion = {
-          accept = "<M-l>",
-          next = "<M-]>",
-          prev = "<M-[>",
-          dismiss = "<C-]>",
-        },
-        jump = {
-          next = "]]",
-          prev = "[[",
-        },
-        submit = {
-          normal = "<CR>",
-          insert = "<C-s>",
-        },
-        sidebar = {
-          apply_all = "A",
-          apply_cursor = "a",
-          switch_windows = "<Tab>",
-          reverse_switch_windows = "<S-Tab>",
-        },
+      -- Configuración para limitar el contexto del RAG
+      context = {
+        max_files = 5, -- Máximo número de archivos a incluir en el contexto
+        max_lines_per_file = 100, -- Máximo número de líneas por archivo
+        max_total_tokens = 30000, -- Límite total de tokens para el contexto (optimizado)
       },
+      --- @class AvanteRepoMapConfig
+      repo_map = {
+        ignore_patterns = { "%.env.*", "^%.env$", "%.git", "%.worktree", "__pycache__", "node_modules" }, -- ignore files matching these
+        negate_patterns = {}, -- negate ignore files matching these.
+      },
+      mappings = mappings,
       hints = { enabled = true },
-      windows = {
-        ---@type "right" | "left" | "top" | "bottom"
-        position = "left", -- Sidebar position
-        wrap = true, -- Similar to vim.o.wrap
-        width = 30, -- Default width percentage
-        sidebar_header = {
-          enabled = true, -- Enables/disables sidebar header
-          align = "center", -- Title alignment: left, center, or right
-          rounded = true,
-        },
-        input = {
-          prefix = "> ",
-          height = 8, -- Input window height in vertical layout
-        },
-        edit = {
-          border = "rounded",
-          start_insert = true, -- Start in insert mode when opening edit window
-        },
-        ask = {
-          floating = false, -- Opens 'AvanteAsk' prompt in a floating window
-          start_insert = true, -- Start in insert mode when opening ask window
-          border = "rounded",
-          ---@type "ours" | "theirs"
-          focus_on_apply = "ours", -- Which diff to focus on after applying
-        },
-      },
+      windows = windows,
       highlights = {
         ---@type AvanteConflictHighlights
         diff = {
@@ -149,31 +96,73 @@ return {
         debounce = 600, -- Delay before showing suggestions
         throttle = 600, -- Minimum time between suggestions
       },
-    })
 
-    -- Autocommand to toggle custom system prompt
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "ToggleMyPrompt",
-      callback = function()
-        -- Load system prompt from external file
-        local prompt_file = vim.fn.stdpath("config") .. "/lua/r4k4210/llm/system_prompt.lua"
-        local ok, system_prompt = pcall(dofile, prompt_file)
+      selector = {
+        provider = "snacks", -- "native" | "fzf_lua" | "mini_pick" | "snacks" | "telescope"
+      },
 
-        -- Apply new system prompt if loading was successful
-        if ok and type(system_prompt) == "string" then
-          require("avante.config").override({ system_prompt = system_prompt })
-          print("Custom system prompt loaded:\n" .. system_prompt) -- 🔹 Verify if loaded correctly
-          vim.notify("Custom system prompt loaded", vim.log.levels.INFO)
-        else
-          print("Failed to load system prompt from file")
-          vim.notify("Failed to load system prompt from file", vim.log.levels.ERROR)
-        end
+      -- Configuración de input mejorada
+      input = {
+        provider = "dressing", -- "native" | "dressing" | "snacks"
+        provider_opts = {},
+      },
+
+      -- system_prompt as function ensures LLM always has latest MCP server state
+      -- This is evaluated for every message, even in existing chats
+      system_prompt = function()
+        local hub = require("mcphub").get_hub_instance()
+        return hub and hub:get_active_servers_prompt() or ""
       end,
+
+      -- Disable thinking/thoughts output - this is not working
+      -- thinking = {
+      --   type = "disabled", -- "enabled" | "disabled"
+      -- },
+
+      -- Using function prevents requiring mcphub before it's loaded
+      custom_tools = function()
+        return {
+          require("mcphub.extensions.avante").mcp_tool(),
+        }
+      end,
+
+      disabled_tools = { -- Lista de herramientas a deshabilitar, ej: {"python", "bash"}
+        "list_files", -- Built-in file operations
+        "search_files",
+        "read_file",
+        "create_file",
+        "rename_file",
+        "delete_file",
+        "create_dir",
+        "rename_dir",
+        "delete_dir",
+        "bash", -- Built-in terminal access
+      },
     })
 
-    -- Keybinding to trigger prompt change
-    vim.keymap.set("n", "<leader>am", function()
-      vim.api.nvim_exec_autocmds("User", { pattern = "ToggleMyPrompt" })
-    end, { desc = "avante: toggle my prompt" })
+    -- -- Autocommand to toggle custom system prompt
+    -- vim.api.nvim_create_autocmd("User", {
+    --   pattern = "ToggleMyPrompt",
+    --   callback = function()
+    --     -- Load system prompt from external file
+    --     local prompt_file = vim.fn.stdpath("config") .. "/lua/r4k4210/llm/system_prompt.lua"
+    --     local ok, system_prompt = pcall(dofile, prompt_file)
+    --
+    --     -- Apply new system prompt if loading was successful
+    --     if ok and type(system_prompt) == "string" then
+    --       require("avante.config").override({ system_prompt = system_prompt })
+    --       print("Custom system prompt loaded:\n" .. system_prompt) -- 🔹 Verify if loaded correctly
+    --       vim.notify("Custom system prompt loaded", vim.log.levels.INFO)
+    --     else
+    --       print("Failed to load system prompt from file")
+    --       vim.notify("Failed to load system prompt from file", vim.log.levels.ERROR)
+    --     end
+    --   end,
+    -- })
+    --
+    -- -- Keybinding to trigger prompt change
+    -- vim.keymap.set("n", "<leader>am", function()
+    --   vim.api.nvim_exec_autocmds("User", { pattern = "ToggleMyPrompt" })
+    -- end, { desc = "avante: toggle my prompt" })
   end,
 }
