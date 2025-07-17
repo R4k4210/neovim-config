@@ -5,10 +5,11 @@ return {
     endpoint = "https://openrouter.ai/api/v1",
     api_key_name = "OPENROUTER_API_KEY",
     model = "anthropic/claude-sonnet-4",
-    -- Configuraciones específicas para evitar problemas con edit mode
-    timeout = 60000, -- Timeout más largo para edit mode
-    max_tokens = 8192, -- Límite de tokens para evitar respuestas muy largas
-    -- Tools específicamente habilitadas para edit mode
-    -- disabled_tools = {}, -- Mantener todas las herramientas habilitadas
+    -- Optimized configurations to prevent double responses
+    timeout = 30000, -- Reduced timeout to prevent response delays
+    max_tokens = 4096, -- Reduced token limit to prevent overly long responses
+    -- temperature = 0.7, -- Add temperature control for consistent responses
+    -- Disable tools that might conflict with MCP
+    -- disabled_tools = { "bash", "python", "read_file", "write_file" },
   },
 }

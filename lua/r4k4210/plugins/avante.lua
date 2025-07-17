@@ -51,14 +51,7 @@ return {
       provider = "openrouter", -- Using OpenRouter as the default provider
 
       providers = providers,
-      ---Configuración dual_boost experimental
-      dual_boost = {
-        enabled = false, -- Deshabilitado por defecto
-        first_provider = "openrouter",
-        second_provider = "claude",
-        prompt = "Based on the two reference outputs below, generate a response that incorporates elements from both but reflects your own judgment and unique perspective. Do not provide any explanation, just give the response directly. Reference Output 1: [{{provider1_output}}], Reference Output 2: [{{provider2_output}}]",
-        timeout = 60000,
-      },
+      -- Removed dual_boost configuration to prevent conflicts
       web_search_engine = {
         provider = "tavily", -- tavily, serpapi, searchapi, google, kagi, brave, or searxng
         proxy = nil, -- proxy support, e.g., http://127.0.0.1:7890
@@ -120,6 +113,12 @@ return {
         local hub = require("mcphub").get_hub_instance()
         return hub and hub:get_active_servers_prompt() or ""
       end,
+
+      -- Disable thinking/thoughts output - this is not working
+      -- thinking = {
+      --   type = "disabled", -- "enabled" | "disabled"
+      -- },
+
       -- Using function prevents requiring mcphub before it's loaded
       custom_tools = function()
         return {
@@ -140,7 +139,6 @@ return {
         "bash", -- Built-in terminal access
       },
     })
-
 
     -- -- Autocommand to toggle custom system prompt
     -- vim.api.nvim_create_autocmd("User", {

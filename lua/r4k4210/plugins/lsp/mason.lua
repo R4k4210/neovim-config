@@ -63,6 +63,8 @@ return {
         -- Linters
         "eslint", -- JavaScript/TypeScript linter
         "pylint", -- Python linter
+        -- Debug Adapters
+        "js-debug-adapter", -- JavaScript/TypeScript debugger
       },
       -- Auto-update tools
       auto_update = false,

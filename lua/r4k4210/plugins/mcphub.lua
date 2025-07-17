@@ -15,10 +15,10 @@ return {
 
       ---Chat-plugin related options-----------------
       auto_approve = false, -- Auto approve mcp tool calls
-      auto_toggle_mcp_servers = true, -- Let LLMs start and stop MCP servers automatically
+      auto_toggle_mcp_servers = true, -- Disable automatic server management to prevent conflicts
       extensions = {
         avante = {
-          make_slash_commands = true, -- make /slash commands from MCP server prompts
+          make_slash_commands = true,
         },
       },
 
