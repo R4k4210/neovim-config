@@ -7,34 +7,45 @@ return {
   --     vim.cmd([[colorscheme nightfly]])
   --   end,
   -- },
+  -- {
+  --   "catppuccin/nvim",
+  --   name = "catppuccin",
+  --   priority = 1000,
+  --   config = function()
+  --     local catppuccin = require("catppuccin")
+  --
+  --     catppuccin.setup({
+  --       flavour = "mocha",
+  --       highlights = require("catppuccin.groups.integrations.bufferline").get(),
+  --       integrations = {
+  --         cmp = true,
+  --         treesitter = true,
+  --         neotree = false,
+  --         notify = false,
+  --         noice = true,
+  --         alpha = true,
+  --         telescope = {
+  --           enabled = true,
+  --         },
+  --         mini = {
+  --           enabled = true,
+  --           indentscope_color = "",
+  --         },
+  --       },
+  --     })
+  --
+  --     vim.cmd([[colorscheme catppuccin]])
+  --   end,
+  -- },
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    priority = 1000,
+    "navarasu/onedark.nvim",
+    priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-      local catppuccin = require("catppuccin")
-
-      catppuccin.setup({
-        flavour = "mocha",
-        highlights = require("catppuccin.groups.integrations.bufferline").get(),
-        integrations = {
-          cmp = true,
-          treesitter = true,
-          neotree = false,
-          notify = false,
-          noice = true,
-          alpha = true,
-          telescope = {
-            enabled = true,
-          },
-          mini = {
-            enabled = true,
-            indentscope_color = "",
-          },
-        },
+      require("onedark").setup({
+        style = "deep", -- dark, darker, cool, warmer, dark, warm
       })
-
-      vim.cmd([[colorscheme catppuccin]])
+      -- Enable theme
+      require("onedark").load()
     end,
   },
 }

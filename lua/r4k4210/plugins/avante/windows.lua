@@ -2,7 +2,7 @@ return {
   ---@type "right" | "left" | "top" | "bottom"
   position = "left", -- Sidebar position
   wrap = true, -- Similar to vim.o.wrap
-  width = 30, -- Default width percentage
+  width = 40, -- More space for side-by-side viewing
   sidebar_header = {
     enabled = true, -- Enables/disables sidebar header
     align = "center", -- Title alignment: left, center, or right

@@ -1,5 +1,4 @@
 local providers = require("r4k4210.plugins.avante.providers")
-local rag_service = require("r4k4210.plugins.avante.rag_service")
 local mappings = require("r4k4210.plugins.avante.mappings")
 local windows = require("r4k4210.plugins.avante.windows")
 local behaviour = require("r4k4210.plugins.avante.behaviour")
@@ -47,16 +46,13 @@ return {
     require("avante").setup({
       -- default_prompt = "default",
       template_dir = vim.fn.stdpath("config") .. "/lua/r4k4210/llm/templates",
-      ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | "openrouter" | string
-      provider = "openrouter", -- Using OpenRouter as the default provider
-
+      provider = "openrouter-sonnet-4.5",
       providers = providers,
       -- Removed dual_boost configuration to prevent conflicts
       web_search_engine = {
         provider = "tavily", -- tavily, serpapi, searchapi, google, kagi, brave, or searxng
         proxy = nil, -- proxy support, e.g., http://127.0.0.1:7890
       },
-      rag_service = rag_service,
       behaviour = behaviour,
       history = {
         max_tokens = 15000, -- Límite de tokens para el historial (optimizado para rendimiento)
@@ -109,18 +105,21 @@ return {
 
       -- system_prompt as function ensures LLM always has latest MCP server state
       -- This is evaluated for every message, even in existing chats
-      system_prompt = function()
+      system_prompt = function(opts)
+        -- Disable MCP prompts for OpenRouter providers
+        if opts and opts.provider and opts.provider:match("^openrouter%-") then
+          return ""
+        end
         local hub = require("mcphub").get_hub_instance()
         return hub and hub:get_active_servers_prompt() or ""
       end,
 
-      -- Disable thinking/thoughts output - this is not working
-      -- thinking = {
-      --   type = "disabled", -- "enabled" | "disabled"
-      -- },
-
       -- Using function prevents requiring mcphub before it's loaded
-      custom_tools = function()
+      custom_tools = function(opts)
+        -- Disable MCP tools for OpenRouter providers
+        if opts and opts.provider and opts.provider:match("^openrouter%-") then
+          return {}
+        end
         return {
           require("mcphub.extensions.avante").mcp_tool(),
         }
@@ -137,32 +136,8 @@ return {
         "rename_dir",
         "delete_dir",
         "bash", -- Built-in terminal access
+        "view", -- Redundant since you can see the file in the editor
       },
     })
-
-    -- -- Autocommand to toggle custom system prompt
-    -- vim.api.nvim_create_autocmd("User", {
-    --   pattern = "ToggleMyPrompt",
-    --   callback = function()
-    --     -- Load system prompt from external file
-    --     local prompt_file = vim.fn.stdpath("config") .. "/lua/r4k4210/llm/system_prompt.lua"
-    --     local ok, system_prompt = pcall(dofile, prompt_file)
-    --
-    --     -- Apply new system prompt if loading was successful
-    --     if ok and type(system_prompt) == "string" then
-    --       require("avante.config").override({ system_prompt = system_prompt })
-    --       print("Custom system prompt loaded:\n" .. system_prompt) -- 🔹 Verify if loaded correctly
-    --       vim.notify("Custom system prompt loaded", vim.log.levels.INFO)
-    --     else
-    --       print("Failed to load system prompt from file")
-    --       vim.notify("Failed to load system prompt from file", vim.log.levels.ERROR)
-    --     end
-    --   end,
-    -- })
-    --
-    -- -- Keybinding to trigger prompt change
-    -- vim.keymap.set("n", "<leader>am", function()
-    --   vim.api.nvim_exec_autocmds("User", { pattern = "ToggleMyPrompt" })
-    -- end, { desc = "avante: toggle my prompt" })
   end,
 }

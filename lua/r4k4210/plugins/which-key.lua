@@ -68,6 +68,7 @@ return {
       { "<leader>s", group = "Search & Symbols", icon = "󰍉" },
       { "<leader>t", group = "Terminal", icon = "󰆍" },
       { "<leader>u", group = "UI Toggles", icon = "󰍉" },
+      { "<leader>o", group = "Obsidian", icon = "📝" },
       -- Hidden mappings
       { "<leader>n", hidden = true },
       { "<leader>p", hidden = true },

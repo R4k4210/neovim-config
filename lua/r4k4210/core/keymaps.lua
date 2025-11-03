@@ -49,3 +49,13 @@ keymap.set("n", "<leader>b<", "<cmd>BufferLineMovePrev<CR>", { desc = "Buffer mo
 -- Move code
 keymap.set("n", "<M-Up>", "<cmd>m .-2<CR>", { desc = "move line up" })
 keymap.set("n", "<M-Down>", "<cmd>m .+1<CR>", { desc = "move line down" })
+
+-- Obsidian - Global keymaps (available from any buffer)
+keymap.set("n", "<leader>on", "<cmd>ObsidianNew<CR>", { desc = "New Obsidian note" })
+keymap.set("n", "<leader>ot", "<cmd>ObsidianToday<CR>", { desc = "Today's note" })
+keymap.set("n", "<leader>oy", "<cmd>ObsidianYesterday<CR>", { desc = "Yesterday's note" })
+keymap.set("n", "<leader>os", "<cmd>ObsidianSearch<CR>", { desc = "Search Obsidian notes" })
+keymap.set("n", "<leader>oq", "<cmd>ObsidianQuickSwitch<CR>", { desc = "Quick switch notes" })
+keymap.set("n", "<leader>ol", "<cmd>ObsidianLinks<CR>", { desc = "Show note links" })
+keymap.set("n", "<leader>ob", "<cmd>ObsidianBacklinks<CR>", { desc = "Show backlinks" })
+keymap.set("n", "<leader>ow", "<cmd>ObsidianWorkspace<CR>", { desc = "Switch workspace" })

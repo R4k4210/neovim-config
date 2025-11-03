@@ -43,3 +43,6 @@ opt.swapfile = false
 
 -- views can only be fully collapsed with the global statusline
 opt.laststatus = 3
+
+-- obsidian
+opt.conceallevel = 2
