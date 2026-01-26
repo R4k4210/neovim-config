@@ -16,5 +16,29 @@
       "export default ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/};"
     ],
     "description": "Functional component with default export"
+  },
+  "styled-component": {
+    "prefix": ["wonder-sc"],
+    "body": [
+      "import { styled } from '@mui/material/styles';",
+      "",
+      "export const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} = () => {",
+      "\treturn (",
+      "\t\t<Container>",
+      "\t\t</Container>",
+      "\t);",
+      "};",
+      "",
+      "export const Container = styled('div')`",
+      "\tdisplay: flex;",
+      "\tflex-direction: column;",
+      "\talign-items: center;",
+      "\tjustify-content: center;",
+      "\tpadding: 1rem 1.6rem;",
+      "\twidth: 100%;",
+      "\tmargin: 0 auto;",
+      "`;"
+    ],
+    "description": "Styled component with named export"
   }
 }

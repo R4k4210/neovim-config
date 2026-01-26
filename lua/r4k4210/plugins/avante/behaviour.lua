@@ -8,7 +8,8 @@ return {
   enable_token_counting = true, -- Helpful for monitoring usage
   enable_cursor_planning_mode = false, -- Disable to prevent conflicts with MCP
   auto_approve_tool_permissions = false, -- Show permission prompts for tools
-  streaming = true, -- Better UX with real-time responses
-  debounce_delay = 400, -- More responsive delay
-  response_timeout = 30000, -- Match provider timeout
+  auto_focus_on_diff_view = true, -- Focus on diff view after generation
+  auto_focus_sidebar = true, -- Auto focus sidebar when opened
+  jump_result_buffer_on_finish = true, -- Jump to result buffer when done
+  confirmation_ui_style = "inline_buttons", -- Keep buttons (popup loses focus)
 }

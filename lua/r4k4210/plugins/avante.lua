@@ -33,14 +33,7 @@ return {
         },
       },
     },
-    {
-      -- Markdown rendering support
-      "MeanderingProgrammer/render-markdown.nvim",
-      opts = {
-        file_types = { "markdown", "Avante" },
-      },
-      ft = { "markdown", "Avante" },
-    },
+    "MeanderingProgrammer/render-markdown.nvim", -- Configured in render-markdown.lua
   },
   config = function()
     require("avante").setup({
@@ -71,13 +64,13 @@ return {
         negate_patterns = {}, -- negate ignore files matching these.
       },
       mappings = mappings,
-      hints = { enabled = true },
+      hints = { enabled = false }, -- Disabled to avoid duplicate UI with inline buttons
       windows = windows,
       highlights = {
         ---@type AvanteConflictHighlights
         diff = {
-          current = "DiffText",
-          incoming = "DiffAdd",
+          current = "AvanteConflictCurrent",
+          incoming = "AvanteConflictIncoming",
         },
       },
       --- @class AvanteConflictUserConfig
