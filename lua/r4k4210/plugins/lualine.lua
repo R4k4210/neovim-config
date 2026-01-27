@@ -3,46 +3,10 @@ return {
   dependencies = { "nvim-tree/nvim-web-devicons" },
   config = function()
     local lualine = require("lualine")
+    local c = require("r4k4210.core.colors")
 
-    -- Color table for highlights (OneDark Deep palette)
-    -- stylua: ignore
-    local colors = {
-      bg       = '#141b24',
-      fg       = '#93a4c3',
-      yellow   = '#efbd5d',
-      cyan     = '#34bfd0',
-      darkblue = '#102b40',
-      green    = '#8bcd5b',
-      orange   = '#dd9046',
-      violet   = '#c75ae8',
-      magenta  = '#c75ae8',
-      blue     = '#41a7fc',
-      red      = '#f65866',
-    }
-
-    -- Avante-specific color scheme (same as main for consistency)
-    local avante_colors = {
-      bg = "#141b24",
-      fg = "#93a4c3",
-      yellow = "#efbd5d",
-      cyan = "#34bfd0",
-      darkblue = "#102b40",
-      green = "#8bcd5b",
-      orange = "#dd9046",
-      violet = "#c75ae8",
-      magenta = "#c75ae8",
-      blue = "#41a7fc",
-      red = "#f65866",
-    }
-
-    -- Function to get current color scheme based on filetype
-    local function get_colors()
-      if vim.bo.filetype == "Avante" or vim.bo.filetype == "AvanteInput" then
-        return avante_colors
-      else
-        return colors
-      end
-    end
+    -- Color table for highlights (from centralized colors)
+    local colors = c.lualine
 
     local conditions = {
       buffer_not_empty = function()
@@ -55,10 +19,6 @@ return {
         local filepath = vim.fn.expand("%:p:h")
         local gitdir = vim.fn.finddir(".git", filepath .. ";")
         return gitdir and #gitdir > 0 and #gitdir < #filepath
-      end,
-      -- Condición específica para ocultar lualine solo en buffers de Avante
-      not_avante_buffer = function()
-        return vim.bo.filetype ~= "Avante"
       end,
     }
 
@@ -74,21 +34,8 @@ return {
           winbar = { "Avante", "AvanteInput", "neo-tree" },
         },
         theme = {
-          -- We are going to use lualine_c an lualine_x as left and
-          -- right section. Both are highlighted by c theme .  So we
-          -- are just setting default looks o statusline
-          normal = {
-            c = function()
-              local current_colors = get_colors()
-              return { fg = current_colors.fg, bg = current_colors.bg }
-            end,
-          },
-          inactive = {
-            c = function()
-              local current_colors = get_colors()
-              return { fg = current_colors.fg, bg = current_colors.bg }
-            end,
-          },
+          normal = { c = { fg = colors.fg, bg = colors.bg } },
+          inactive = { c = { fg = colors.fg, bg = colors.bg } },
         },
       },
       sections = {
@@ -136,16 +83,16 @@ return {
             end,
             color = function()
               if not vim.g.loaded_mcphub then
-                return { fg = "#6c7086" } -- Gray for not loaded
+                return { fg = c.base.fg_dark } -- Gray for not loaded
               end
 
               local status = vim.g.mcphub_status or "stopped"
               if status == "ready" or status == "restarted" then
-                return { fg = "#50fa7b" } -- Green for connected
+                return { fg = colors.green } -- Green for connected
               elseif status == "starting" or status == "restarting" then
-                return { fg = "#ffb86c" } -- Orange for connecting
+                return { fg = colors.orange } -- Orange for connecting
               else
-                return { fg = "#ff5555" } -- Red for error/stopped
+                return { fg = colors.red } -- Red for error/stopped
               end
             end,
           },
@@ -167,42 +114,38 @@ return {
       function()
         return "▊"
       end,
-      color = function()
-        local current_colors = get_colors()
-        return { fg = current_colors.blue }
-      end,
-      padding = { left = 0, right = 1 }, -- We don't need space before this
+      color = { fg = colors.blue },
+      padding = { left = 0, right = 1 },
     })
 
     ins_left({
       -- mode component
       function()
-        return ""
+        return ""
       end,
       color = function()
-        local current_colors = get_colors()
         -- auto change color according to neovims mode
         local mode_color = {
-          n = current_colors.red,
-          i = current_colors.green,
-          v = current_colors.blue,
-          [""] = current_colors.blue,
-          V = current_colors.blue,
-          c = current_colors.magenta,
-          no = current_colors.red,
-          s = current_colors.orange,
-          S = current_colors.orange,
-          ["\19"] = current_colors.orange,
-          ic = current_colors.yellow,
-          R = current_colors.violet,
-          Rv = current_colors.violet,
-          cv = current_colors.red,
-          ce = current_colors.red,
-          r = current_colors.cyan,
-          rm = current_colors.cyan,
-          ["r?"] = current_colors.cyan,
-          ["!"] = current_colors.red,
-          t = current_colors.red,
+          n = colors.red,
+          i = colors.green,
+          v = colors.blue,
+          [""] = colors.blue,
+          V = colors.blue,
+          c = colors.magenta,
+          no = colors.red,
+          s = colors.orange,
+          S = colors.orange,
+          ["\19"] = colors.orange,
+          ic = colors.yellow,
+          R = colors.violet,
+          Rv = colors.violet,
+          cv = colors.red,
+          ce = colors.red,
+          r = colors.cyan,
+          rm = colors.cyan,
+          ["r?"] = colors.cyan,
+          ["!"] = colors.red,
+          t = colors.red,
         }
         return { fg = mode_color[vim.fn.mode()] }
       end,
@@ -221,11 +164,11 @@ return {
       color = function()
         -- Cambiar color según el filetype del buffer
         if vim.bo.filetype == "Avante" then
-          return { fg = "#E06C75", gui = "bold" } -- Rojo para Avante
+          return { fg = colors.red, gui = "bold" }
         elseif vim.bo.filetype == "AvanteInput" then
-          return { fg = "#98C379", gui = "bold" } -- Verde para AvanteInput
+          return { fg = colors.green, gui = "bold" }
         else
-          return { fg = colors.magenta, gui = "bold" } -- Color por defecto
+          return { fg = colors.magenta, gui = "bold" }
         end
       end,
     })
@@ -242,10 +185,7 @@ return {
         end
         return ""
       end,
-      color = function()
-        local current_colors = get_colors()
-        return { fg = current_colors.cyan, gui = "bold" }
-      end,
+      color = { fg = colors.cyan, gui = "bold" },
     })
 
     ins_left({
@@ -256,44 +196,28 @@ return {
         end
         return ""
       end,
-      color = function()
-        local current_colors = get_colors()
-        return { fg = current_colors.red, gui = "bold" }
-      end,
+      color = { fg = colors.red, gui = "bold" },
     })
 
     ins_left({ "location" })
 
     ins_left({
       "progress",
-      color = function()
-        local current_colors = get_colors()
-        return { fg = current_colors.fg, gui = "bold" }
-      end,
+      color = { fg = colors.fg, gui = "bold" },
     })
 
     ins_left({
       "diagnostics",
       sources = { "nvim_diagnostic" },
-      symbols = { error = " ", warn = " ", info = " " },
+      symbols = { error = " ", warn = " ", info = " " },
       diagnostics_color = {
-        color_error = function()
-          local current_colors = get_colors()
-          return { fg = current_colors.red }
-        end,
-        color_warn = function()
-          local current_colors = get_colors()
-          return { fg = current_colors.yellow }
-        end,
-        color_info = function()
-          local current_colors = get_colors()
-          return { fg = current_colors.cyan }
-        end,
+        color_error = { fg = colors.red },
+        color_warn = { fg = colors.yellow },
+        color_info = { fg = colors.cyan },
       },
     })
 
-    -- Insert mid section. You can make any number of sections in neovim :)
-    -- for lualine it's any number greater then 2
+    -- Insert mid section
     ins_left({
       function()
         return "%="
@@ -301,7 +225,7 @@ return {
     })
 
     ins_left({
-      -- Lsp server name .
+      -- Lsp server name
       function()
         local msg = "No Active Lsp"
         local clients = vim.lsp.get_clients({ bufnr = 0 })
@@ -313,8 +237,8 @@ return {
         end
         return msg
       end,
-      icon = " LSP:",
-      color = { fg = "#ffffff", gui = "bold" },
+      icon = " LSP:",
+      color = { fg = c.base.fg_light, gui = "bold" },
     })
 
     -- Add components to right sections
@@ -327,10 +251,7 @@ return {
         end
         return ""
       end,
-      color = function()
-        local current_colors = get_colors()
-        return { fg = current_colors.red, gui = "bold" }
-      end,
+      color = { fg = colors.red, gui = "bold" },
     })
 
     ins_right({
@@ -349,7 +270,7 @@ return {
     })
 
     ins_right({
-      -- Indentation info - shows current indentation settings
+      -- Indentation info
       function()
         local expandtab = vim.bo.expandtab
         local shiftwidth = vim.bo.shiftwidth
@@ -364,8 +285,8 @@ return {
     })
 
     ins_right({
-      "o:encoding", -- option component same as &encoding in viml
-      fmt = string.upper, -- I'm not sure why it's upper case either ;)
+      "o:encoding",
+      fmt = string.upper,
       cond = conditions.hide_in_width,
       color = { fg = colors.green, gui = "bold" },
     })
@@ -373,20 +294,19 @@ return {
     ins_right({
       "fileformat",
       fmt = string.upper,
-      icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
+      icons_enabled = false,
       color = { fg = colors.green, gui = "bold" },
     })
 
     ins_right({
       "branch",
-      icon = "",
+      icon = "",
       color = { fg = colors.violet, gui = "bold" },
     })
 
     ins_right({
       "diff",
-      -- Is it me or the symbol for modified us really weird
-      symbols = { added = " ", modified = "󰝤 ", removed = " " },
+      symbols = { added = " ", modified = "󰝤 ", removed = " " },
       diff_color = {
         added = { fg = colors.green },
         modified = { fg = colors.orange },
@@ -399,12 +319,10 @@ return {
       function()
         return "▊"
       end,
-      color = function()
-        local current_colors = get_colors()
-        return { fg = current_colors.blue }
-      end,
+      color = { fg = colors.blue },
       padding = { left = 1 },
     })
+
     -- configure lualine with modified theme
     lualine.setup(config)
   end,
