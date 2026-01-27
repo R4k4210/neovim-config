@@ -4,35 +4,35 @@ return {
   config = function()
     local lualine = require("lualine")
 
-    -- Color table for highlights
+    -- Color table for highlights (OneDark Deep palette)
     -- stylua: ignore
     local colors = {
-      bg       = '#202328',
-      fg       = '#bbc2cf',
-      yellow   = '#ECBE7B',
-      cyan     = '#008080',
-      darkblue = '#081633',
-      green    = '#98be65',
-      orange   = '#FF8800',
-      violet   = '#a9a1e1',
-      magenta  = '#c678dd',
-      blue     = '#51afef',
-      red      = '#ec5f67',
+      bg       = '#141b24',
+      fg       = '#93a4c3',
+      yellow   = '#efbd5d',
+      cyan     = '#34bfd0',
+      darkblue = '#102b40',
+      green    = '#8bcd5b',
+      orange   = '#dd9046',
+      violet   = '#c75ae8',
+      magenta  = '#c75ae8',
+      blue     = '#41a7fc',
+      red      = '#f65866',
     }
 
-    -- Avante-specific color scheme
+    -- Avante-specific color scheme (same as main for consistency)
     local avante_colors = {
-      bg = "#1a1a2e",
-      fg = "#eee6e6",
-      yellow = "#ffd700",
-      cyan = "#40e0d0",
-      darkblue = "#16213e",
-      green = "#00ff7f",
-      orange = "#ff6347",
-      violet = "#dda0dd",
-      magenta = "#ff1493",
-      blue = "#4169e1",
-      red = "#ff4500",
+      bg = "#141b24",
+      fg = "#93a4c3",
+      yellow = "#efbd5d",
+      cyan = "#34bfd0",
+      darkblue = "#102b40",
+      green = "#8bcd5b",
+      orange = "#dd9046",
+      violet = "#c75ae8",
+      magenta = "#c75ae8",
+      blue = "#41a7fc",
+      red = "#f65866",
     }
 
     -- Function to get current color scheme based on filetype

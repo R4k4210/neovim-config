@@ -43,6 +43,9 @@ return {
     config = function()
       require("onedark").setup({
         style = "deep", -- dark, darker, cool, warmer, dark, warm
+        colors = {
+          bg0 = "#141b24", -- use bg_d as main background (darker)
+        },
         highlights = {
           -- ╔══════════════════════════════════════════════════════════════════╗
           -- ║                    OneDark Deep Palette Reference                 ║
@@ -53,6 +56,13 @@ return {
           -- ║ purple=#c75ae8  cyan=#34bfd0  orange=#dd9046                      ║
           -- ║ diff_add=#27341c  diff_delete=#331c1e  diff_change=#102b40        ║
           -- ╚══════════════════════════════════════════════════════════════════╝
+
+          -- ┌──────────────────────────────────────────────────────────────────┐
+          -- │                         Cursor Colors                            │
+          -- └──────────────────────────────────────────────────────────────────┘
+          Cursor = { bg = "#ff4000", fg = "#141b24" }, -- orange/red cursor - matches smear
+          lCursor = { bg = "#ff4000", fg = "#141b24" }, -- language mapping cursor
+          TermCursor = { bg = "#ff4000", fg = "#141b24" }, -- terminal cursor
 
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                      render-markdown highlights                   │
@@ -69,32 +79,32 @@ return {
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                      Avante Sidebar & Input                       │
           -- └──────────────────────────────────────────────────────────────────┘
-          AvanteSidebarNormal = { bg = "#1a212e", fg = "#93a4c3" }, -- bg0, fg
-          AvantePromptInput = { bg = "#1a212e", fg = "#93a4c3" }, -- bg0, fg
-          AvantePromptInputBorder = { bg = "#1a212e", fg = "#455574" }, -- bg0, grey
+          AvanteSidebarNormal = { bg = "#141b24", fg = "#93a4c3" }, -- bg0, fg
+          AvantePromptInput = { bg = "#141b24", fg = "#93a4c3" }, -- bg0, fg
+          AvantePromptInputBorder = { bg = "#141b24", fg = "#455574" }, -- bg0, grey
           AvantePopupHint = { bg = "#21283b", fg = "#93a4c3" }, -- bg1, fg
           AvanteInlineHint = { fg = "#c75ae8", italic = true }, -- purple
 
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                         Avante Titles                             │
           -- └──────────────────────────────────────────────────────────────────┘
-          AvanteTitle = { fg = "#1a212e", bg = "#8bcd5b", bold = true }, -- bg0, green
-          AvanteReversedTitle = { fg = "#8bcd5b", bg = "#1a212e" }, -- green, bg0
-          AvanteSubtitle = { fg = "#1a212e", bg = "#34bfd0", bold = true }, -- bg0, cyan
-          AvanteReversedSubtitle = { fg = "#34bfd0", bg = "#1a212e" }, -- cyan, bg0
+          AvanteTitle = { fg = "#141b24", bg = "#8bcd5b", bold = true }, -- bg0, green
+          AvanteReversedTitle = { fg = "#8bcd5b", bg = "#141b24" }, -- green, bg0
+          AvanteSubtitle = { fg = "#141b24", bg = "#34bfd0", bold = true }, -- bg0, cyan
+          AvanteReversedSubtitle = { fg = "#34bfd0", bg = "#141b24" }, -- cyan, bg0
           AvanteThirdTitle = { fg = "#93a4c3", bg = "#2a324a", bold = true }, -- fg, bg3
-          AvanteReversedThirdTitle = { fg = "#2a324a", bg = "#1a212e" }, -- bg3, bg0
-          AvanteConfirmTitle = { fg = "#1a212e", bg = "#f65866", bold = true }, -- bg0, red
+          AvanteReversedThirdTitle = { fg = "#2a324a", bg = "#141b24" }, -- bg3, bg0
+          AvanteConfirmTitle = { fg = "#141b24", bg = "#f65866", bold = true }, -- bg0, red
 
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                         Avante Buttons                            │
           -- └──────────────────────────────────────────────────────────────────┘
-          AvanteButtonDefault = { fg = "#1a212e", bg = "#6c7d9c" }, -- bg0, light_grey
-          AvanteButtonDefaultHover = { fg = "#1a212e", bg = "#8bcd5b" }, -- bg0, green
-          AvanteButtonPrimary = { fg = "#1a212e", bg = "#41a7fc" }, -- bg0, blue
-          AvanteButtonPrimaryHover = { fg = "#1a212e", bg = "#34bfd0" }, -- bg0, cyan
-          AvanteButtonDanger = { fg = "#1a212e", bg = "#6c7d9c" }, -- bg0, light_grey
-          AvanteButtonDangerHover = { fg = "#1a212e", bg = "#f65866" }, -- bg0, red
+          AvanteButtonDefault = { fg = "#141b24", bg = "#6c7d9c" }, -- bg0, light_grey
+          AvanteButtonDefaultHover = { fg = "#141b24", bg = "#8bcd5b" }, -- bg0, green
+          AvanteButtonPrimary = { fg = "#141b24", bg = "#41a7fc" }, -- bg0, blue
+          AvanteButtonPrimaryHover = { fg = "#141b24", bg = "#34bfd0" }, -- bg0, cyan
+          AvanteButtonDanger = { fg = "#141b24", bg = "#6c7d9c" }, -- bg0, light_grey
+          AvanteButtonDangerHover = { fg = "#141b24", bg = "#f65866" }, -- bg0, red
 
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                       Avante Diff/Conflict                        │
@@ -109,21 +119,21 @@ return {
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                      Avante State Spinners                        │
           -- └──────────────────────────────────────────────────────────────────┘
-          AvanteStateSpinnerGenerating = { fg = "#1a212e", bg = "#c75ae8" }, -- bg0, purple
-          AvanteStateSpinnerThinking = { fg = "#1a212e", bg = "#c75ae8" }, -- bg0, purple
-          AvanteStateSpinnerToolCalling = { fg = "#1a212e", bg = "#34bfd0" }, -- bg0, cyan
-          AvanteStateSpinnerSearching = { fg = "#1a212e", bg = "#c75ae8" }, -- bg0, purple
-          AvanteStateSpinnerCompacting = { fg = "#1a212e", bg = "#c75ae8" }, -- bg0, purple
-          AvanteStateSpinnerSucceeded = { fg = "#1a212e", bg = "#8bcd5b" }, -- bg0, green
-          AvanteStateSpinnerFailed = { fg = "#1a212e", bg = "#f65866" }, -- bg0, red
+          AvanteStateSpinnerGenerating = { fg = "#141b24", bg = "#c75ae8" }, -- bg0, purple
+          AvanteStateSpinnerThinking = { fg = "#141b24", bg = "#c75ae8" }, -- bg0, purple
+          AvanteStateSpinnerToolCalling = { fg = "#141b24", bg = "#34bfd0" }, -- bg0, cyan
+          AvanteStateSpinnerSearching = { fg = "#141b24", bg = "#c75ae8" }, -- bg0, purple
+          AvanteStateSpinnerCompacting = { fg = "#141b24", bg = "#c75ae8" }, -- bg0, purple
+          AvanteStateSpinnerSucceeded = { fg = "#141b24", bg = "#8bcd5b" }, -- bg0, green
+          AvanteStateSpinnerFailed = { fg = "#141b24", bg = "#f65866" }, -- bg0, red
 
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                        Avante Task Status                         │
           -- └──────────────────────────────────────────────────────────────────┘
-          AvanteTaskRunning = { fg = "#c75ae8", bg = "#1a212e" }, -- purple, bg0
-          AvanteTaskCompleted = { fg = "#8bcd5b", bg = "#1a212e" }, -- green, bg0
-          AvanteTaskFailed = { fg = "#f65866", bg = "#1a212e" }, -- red, bg0
-          AvanteThinking = { fg = "#c75ae8", bg = "#1a212e" }, -- purple, bg0
+          AvanteTaskRunning = { fg = "#c75ae8", bg = "#141b24" }, -- purple, bg0
+          AvanteTaskCompleted = { fg = "#8bcd5b", bg = "#141b24" }, -- green, bg0
+          AvanteTaskFailed = { fg = "#f65866", bg = "#141b24" }, -- red, bg0
+          AvanteThinking = { fg = "#c75ae8", bg = "#141b24" }, -- purple, bg0
 
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                          Avante Misc                              │
@@ -131,9 +141,9 @@ return {
           AvanteSuggestion = { fg = "#455574", italic = true }, -- grey
           AvanteAnnotation = { fg = "#455574", italic = true }, -- grey
           AvanteCommentFg = { fg = "#455574" }, -- grey
-          AvanteReversedNormal = { fg = "#1a212e", bg = "#93a4c3" }, -- bg0, fg
-          AvanteSidebarWinSeparator = { fg = "#455574", bg = "#1a212e" }, -- grey, bg0
-          AvanteSidebarWinHorizontalSeparator = { fg = "#455574", bg = "#1a212e" }, -- grey, bg0
+          AvanteReversedNormal = { fg = "#141b24", bg = "#93a4c3" }, -- bg0, fg
+          AvanteSidebarWinSeparator = { fg = "#455574", bg = "#141b24" }, -- grey, bg0
+          AvanteSidebarWinHorizontalSeparator = { fg = "#455574", bg = "#141b24" }, -- grey, bg0
         },
       })
       -- Enable theme
