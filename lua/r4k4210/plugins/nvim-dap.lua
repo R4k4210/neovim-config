@@ -121,6 +121,20 @@ return {
       },
     }
 
+    -- Chrome/Browser debugging adapter
+    dap.adapters["pwa-chrome"] = {
+      type = "server",
+      host = "localhost",
+      port = "${port}",
+      executable = {
+        command = "node",
+        args = {
+          vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+          "${port}",
+        },
+      },
+    }
+
     -- TypeScript/JavaScript configurations
     dap.configurations.typescript = {
       {
@@ -366,6 +380,72 @@ return {
           "!**/node_modules/**",
         },
       },
+
+      -- ╔══════════════════════════════════════════════════════════════════════╗
+      -- ║                     BROWSER DEBUGGING (Chrome/Zen)                    ║
+      -- ╚══════════════════════════════════════════════════════════════════════╝
+
+      -- Vite + Chrome (attach to running dev server)
+      {
+        type = "pwa-chrome",
+        request = "launch",
+        name = "🌐 Vite: Debug in Chrome (localhost:5173)",
+        url = "http://localhost:5173",
+        webRoot = "${workspaceFolder}",
+        sourceMaps = true,
+        sourceMapPathOverrides = {
+          ["/./*"] = "${webRoot}/*",
+        },
+        skipFiles = { "<node_internals>/**/*.js", "**/node_modules/**" },
+      },
+      {
+        type = "pwa-chrome",
+        request = "launch",
+        name = "🌐 Vite: Debug in Chrome (localhost:3000)",
+        url = "http://localhost:3000",
+        webRoot = "${workspaceFolder}",
+        sourceMaps = true,
+        sourceMapPathOverrides = {
+          ["/./*"] = "${webRoot}/*",
+        },
+        skipFiles = { "<node_internals>/**/*.js", "**/node_modules/**" },
+      },
+
+      -- Next.js + Chrome
+      {
+        type = "pwa-chrome",
+        request = "launch",
+        name = "🌐 Next.js: Debug in Chrome (localhost:3000)",
+        url = "http://localhost:3000",
+        webRoot = "${workspaceFolder}",
+        sourceMaps = true,
+        sourceMapPathOverrides = {
+          ["webpack://_N_E/*"] = "${webRoot}/*",
+        },
+        skipFiles = { "<node_internals>/**/*.js", "**/node_modules/**" },
+      },
+
+      -- Attach to existing Chrome with remote debugging
+      {
+        type = "pwa-chrome",
+        request = "attach",
+        name = "🔗 Attach to Chrome (port 9222)",
+        port = 9222,
+        webRoot = "${workspaceFolder}",
+        sourceMaps = true,
+        skipFiles = { "<node_internals>/**/*.js", "**/node_modules/**" },
+      },
+
+      -- Zen Browser (Firefox-based) - uses same port as Firefox remote debugging
+      {
+        type = "pwa-chrome",
+        request = "attach",
+        name = "🦊 Attach to Zen Browser (port 9222)",
+        port = 9222,
+        webRoot = "${workspaceFolder}",
+        sourceMaps = true,
+        skipFiles = { "<node_internals>/**/*.js", "**/node_modules/**" },
+      },
     }
 
     -- JavaScript configurations (same as TypeScript)
@@ -496,14 +576,58 @@ return {
       dapui.toggle()
     end, { desc = "DAP: Toggle UI" })
 
+    -- Launch browser with remote debugging (separate debug profile)
+    local function launch_browser_debug(browser)
+      local debug_profile_dir = vim.fn.expand("~/.config/debug-browsers/" .. browser)
+
+      -- Create profile dir if it doesn't exist
+      vim.fn.mkdir(debug_profile_dir, "p")
+
+      local browsers = {
+        zen = {
+          mac = "/Applications/Zen.app/Contents/MacOS/zen",
+          linux = "zen-browser",
+          -- Firefox-based uses -profile
+          profile_flag = "-profile",
+        },
+        chrome = {
+          mac = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome",
+          linux = "google-chrome",
+          -- Chrome uses --user-data-dir
+          profile_flag = "--user-data-dir=",
+        },
+      }
+
+      local is_mac = vim.fn.has("macunix") == 1
+      local b = browsers[browser]
+      local path = is_mac and b.mac or b.linux
+
+      local cmd
+      if browser == "zen" then
+        cmd = path .. " " .. b.profile_flag .. " " .. debug_profile_dir .. " --remote-debugging-port=9222 &"
+      else
+        cmd = path .. " " .. b.profile_flag .. debug_profile_dir .. " --remote-debugging-port=9222 &"
+      end
+
+      vim.fn.system(cmd)
+      vim.notify("Launched " .. browser .. " (debug profile) on port 9222", vim.log.levels.INFO)
+    end
+
+    vim.keymap.set("n", "<Leader>dA", function()
+      vim.ui.select({ "Chrome", "Zen Browser" }, {
+        prompt = "Launch browser with debug profile:",
+      }, function(choice)
+        if choice == "Chrome" then
+          launch_browser_debug("chrome")
+        elseif choice == "Zen Browser" then
+          launch_browser_debug("zen")
+        end
+      end)
+    end, { desc = "DAP: Launch browser (debug profile)" })
+
     -- DAP Commands using native Neovim commands
-    vim.keymap.set("n", "<Leader>dcc", '<cmd>lua require("dap").run_to_cursor()<cr>', { desc = "DAP: Run to Cursor" })
-    vim.keymap.set(
-      "n",
-      "<Leader>dcb",
-      '<cmd>lua require("dap").list_breakpoints()<cr>',
-      { desc = "DAP: List Breakpoints" }
-    )
-    vim.keymap.set("n", "<Leader>dct", '<cmd>lua require("dap").terminate()<cr>', { desc = "DAP: Terminate" })
+    vim.keymap.set("n", "<Leader>drc", '<cmd>lua require("dap").run_to_cursor()<cr>', { desc = "DAP: Run to Cursor" })
+    vim.keymap.set("n", "<Leader>dLb", '<cmd>lua require("dap").list_breakpoints()<cr>', { desc = "DAP: List Breakpoints" })
+    vim.keymap.set("n", "<Leader>dt", '<cmd>lua require("dap").terminate()<cr>', { desc = "DAP: Terminate" })
   end,
 }
