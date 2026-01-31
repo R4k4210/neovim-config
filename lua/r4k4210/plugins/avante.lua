@@ -39,8 +39,36 @@ return {
     require("avante").setup({
       -- default_prompt = "default",
       template_dir = vim.fn.stdpath("config") .. "/lua/r4k4210/llm/templates",
-      provider = "openrouter-sonnet-4.5",
+      provider = "openrouter-gpt5", -- Switch to "claude-code" for agentic mode
       providers = providers,
+
+      -- ACP (Agent Client Protocol) providers for agentic capabilities
+      acp_providers = {
+        ["claude-code"] = {
+          command = "npx",
+          args = { "@zed-industries/claude-code-acp" },
+          env = {
+            NODE_NO_WARNINGS = "1",
+            ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY"),
+          },
+        },
+        ["gemini-cli"] = {
+          command = "gemini",
+          args = { "--experimental-acp" },
+          env = {
+            NODE_NO_WARNINGS = "1",
+            GEMINI_API_KEY = os.getenv("GEMINI_API_KEY"),
+          },
+        },
+        ["codex"] = {
+          command = "npx",
+          args = { "@zed-industries/codex-acp" },
+          env = {
+            NODE_NO_WARNINGS = "1",
+            OPENAI_API_KEY = os.getenv("OPENAI_API_KEY"),
+          },
+        },
+      },
       -- Removed dual_boost configuration to prevent conflicts
       web_search_engine = {
         provider = "tavily", -- tavily, serpapi, searchapi, google, kagi, brave, or searxng

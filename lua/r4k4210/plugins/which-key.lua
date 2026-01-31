@@ -17,6 +17,10 @@ return {
     triggers = {
       { "<leader>", mode = { "n", "v" } },
     },
+    -- Allow which-key to work in terminal buffers (normal mode)
+    filter = function(mapping)
+      return true
+    end,
     -- Enhanced plugins configuration
     plugins = {
       marks = true,
@@ -65,10 +69,18 @@ return {
       { "<leader>g", group = "Git", icon = "󰊢" },
       { "<leader>m", group = "Tools & Format", icon = "🔧" },
       { "<leader>a", group = "Avante AI", icon = "🤖" },
+      { "<leader>aa", desc = "Ask", icon = "💬" },
+      { "<leader>at", desc = "Toggle sidebar", icon = "📋" },
+      { "<leader>ae", desc = "Edit", icon = "✏️" },
+      { "<leader>ac", desc = "Clear chat", icon = "🗑️" },
+      { "<leader>af", desc = "Focus input", icon = "🎯" },
+      { "<leader>ar", desc = "Refresh", icon = "🔄" },
+      { "<leader>as", desc = "Stop generation", icon = "⏹️" },
+      { "<leader>ap", desc = "Switch provider", icon = "🔀" },
       { "<leader>s", group = "Search & Symbols", icon = "󰍉" },
       { "<leader>t", group = "Terminal", icon = "󰆍" },
       { "<leader>u", group = "UI Toggles", icon = "󰍉" },
-      { "<leader>o", group = "Obsidian", icon = "📝" },
+      { "<leader>d", group = "Debug", icon = "🐛" },
       -- Hidden mappings
       { "<leader>n", hidden = true },
       { "<leader>p", hidden = true },

@@ -50,12 +50,38 @@ keymap.set("n", "<leader>b<", "<cmd>BufferLineMovePrev<CR>", { desc = "Buffer mo
 keymap.set("n", "<M-Up>", "<cmd>m .-2<CR>", { desc = "move line up" })
 keymap.set("n", "<M-Down>", "<cmd>m .+1<CR>", { desc = "move line down" })
 
--- Obsidian - Global keymaps (available from any buffer)
-keymap.set("n", "<leader>on", "<cmd>ObsidianNew<CR>", { desc = "New Obsidian note" })
-keymap.set("n", "<leader>ot", "<cmd>ObsidianToday<CR>", { desc = "Today's note" })
-keymap.set("n", "<leader>oy", "<cmd>ObsidianYesterday<CR>", { desc = "Yesterday's note" })
-keymap.set("n", "<leader>os", "<cmd>ObsidianSearch<CR>", { desc = "Search Obsidian notes" })
-keymap.set("n", "<leader>oq", "<cmd>ObsidianQuickSwitch<CR>", { desc = "Quick switch notes" })
-keymap.set("n", "<leader>ol", "<cmd>ObsidianLinks<CR>", { desc = "Show note links" })
-keymap.set("n", "<leader>ob", "<cmd>ObsidianBacklinks<CR>", { desc = "Show backlinks" })
-keymap.set("n", "<leader>ow", "<cmd>ObsidianWorkspace<CR>", { desc = "Switch workspace" })
+-- Avante AI
+keymap.set("n", "<leader>aa", "<cmd>AvanteAsk<CR>", { desc = "Ask" })
+keymap.set("v", "<leader>aa", "<cmd>AvanteAsk<CR>", { desc = "Ask with selection" })
+keymap.set("n", "<leader>at", "<cmd>AvanteToggle<CR>", { desc = "Toggle sidebar" })
+keymap.set("n", "<leader>ar", "<cmd>AvanteRefresh<CR>", { desc = "Refresh" })
+keymap.set("n", "<leader>ae", "<cmd>AvanteEdit<CR>", { desc = "Edit" })
+keymap.set("v", "<leader>ae", "<cmd>AvanteEdit<CR>", { desc = "Edit selection" })
+keymap.set("n", "<leader>ac", "<cmd>AvanteClear<CR>", { desc = "Clear chat" })
+keymap.set("n", "<leader>af", "<cmd>AvanteFocus<CR>", { desc = "Focus input" })
+keymap.set("n", "<leader>as", "<cmd>AvanteStop<CR>", { desc = "Stop generation" })
+
+-- Avante: Switch provider (with snacks selector)
+keymap.set("n", "<leader>ap", function()
+  local providers = {
+    "claude-code",        -- ACP: Full agentic Claude Code
+    "openrouter-gpt5",    -- API: GPT-5 via OpenRouter
+    "claudio-sonnet-4.5", -- API: Claude Sonnet via OpenRouter
+    "claudio-opus-4.5",   -- API: Claude Opus via OpenRouter
+  }
+  vim.ui.select(providers, {
+    prompt = "Select Avante Provider:",
+    format_item = function(item)
+      if item == "claude-code" then
+        return item .. " (ACP - Agentic)"
+      else
+        return item .. " (API)"
+      end
+    end,
+  }, function(choice)
+    if choice then
+      require("avante.api").switch_provider(choice)
+      vim.notify("Avante provider: " .. choice, vim.log.levels.INFO)
+    end
+  end)
+end, { desc = "Switch provider" })

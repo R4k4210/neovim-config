@@ -31,8 +31,9 @@ return {
   sections = {
     {
       section = "terminal",
-      cmd = "~/.config/nvim/scripts/center-pokemon.sh; sleep 0.2",
-      random = 10,
+      cmd = "~/.config/nvim/scripts/center-pokemon.sh",
+      pty = true,
+      ttl = 60, -- cache for 1 minute
       pane = 1,
       indent = 10,
       height = 20,

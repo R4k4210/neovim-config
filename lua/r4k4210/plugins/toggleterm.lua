@@ -53,25 +53,17 @@ return {
     local keymap = vim.keymap.set
     local opts = { noremap = true, silent = true }
 
-    -- Toggle terminals (basic functionality only)
-    keymap(
-      "n",
-      "<leader>tf",
-      "<cmd>ToggleTerm direction=float<cr>",
-      vim.tbl_extend("force", opts, { desc = "Float terminal" })
-    )
-    keymap(
-      "n",
-      "<leader>th",
-      "<cmd>ToggleTerm direction=horizontal<cr>",
-      vim.tbl_extend("force", opts, { desc = "Horizontal terminal" })
-    )
-    keymap(
-      "n",
-      "<leader>tv",
-      "<cmd>ToggleTerm direction=vertical<cr>",
-      vim.tbl_extend("force", opts, { desc = "Vertical terminal" })
-    )
+    -- Numbered floating terminals (for multi-project workflow)
+    keymap("n", "<leader>t1", "<cmd>1ToggleTerm direction=float<cr>", vim.tbl_extend("force", opts, { desc = "Terminal 1" }))
+    keymap("n", "<leader>t2", "<cmd>2ToggleTerm direction=float<cr>", vim.tbl_extend("force", opts, { desc = "Terminal 2" }))
+    keymap("n", "<leader>t3", "<cmd>3ToggleTerm direction=float<cr>", vim.tbl_extend("force", opts, { desc = "Terminal 3" }))
+
+    -- Terminal selector
+    keymap("n", "<leader>tt", "<cmd>TermSelect<cr>", vim.tbl_extend("force", opts, { desc = "Select terminal" }))
+
+    -- Direction variants
+    keymap("n", "<leader>th", "<cmd>ToggleTerm direction=horizontal<cr>", vim.tbl_extend("force", opts, { desc = "Horizontal terminal" }))
+    keymap("n", "<leader>tv", "<cmd>ToggleTerm direction=vertical<cr>", vim.tbl_extend("force", opts, { desc = "Vertical terminal" }))
 
     -- Specialized terminals
     keymap("n", "<leader>td", function()
