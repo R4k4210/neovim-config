@@ -49,7 +49,7 @@ return {
           args = { "@zed-industries/claude-code-acp" },
           env = {
             NODE_NO_WARNINGS = "1",
-            ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY"),
+            CLAUDE_CODE_OAUTH_TOKEN = os.getenv("CLAUDE_CODE_OAUTH_TOKEN"),
           },
         },
         ["gemini-cli"] = {

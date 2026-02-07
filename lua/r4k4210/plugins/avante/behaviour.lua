@@ -6,7 +6,7 @@ return {
   support_paste_from_clipboard = false,
   minimize_diff = true, -- Removes unchanged lines when applying a code block
   enable_token_counting = true, -- Helpful for monitoring usage
-  enable_cursor_planning_mode = false, -- Disable to prevent conflicts with MCP
+  enable_cursor_planning_mode = true, -- Cursor planning mode: plan then apply
   auto_approve_tool_permissions = false, -- Show permission prompts for tools
   auto_focus_on_diff_view = true, -- Focus on diff view after generation
   auto_focus_sidebar = true, -- Auto focus sidebar when opened
