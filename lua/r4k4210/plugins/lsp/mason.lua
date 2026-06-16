@@ -46,6 +46,7 @@ return {
         "eslint", -- ESLint
         "clangd", -- C/C++
         "arduino_language_server", -- Arduino
+        "gopls", -- Go LSP
       },
       -- Auto-enable installed servers (v2.0.0 feature)
       automatic_enable = true, -- Updated from automatic_installation
@@ -60,11 +61,15 @@ return {
         "stylua", -- Lua formatter
         "isort", -- Python import sorter
         "black", -- Python formatter
+        "gofumpt", -- Go formatter (stricter gofmt)
+        "goimports", -- Go imports organizer
         -- Linters
         "eslint", -- JavaScript/TypeScript linter
         "pylint", -- Python linter
+        "golangci-lint", -- Go linter
         -- Debug Adapters
         "js-debug-adapter", -- JavaScript/TypeScript debugger
+        "delve", -- Go debugger
       },
       -- Auto-update tools
       auto_update = false,

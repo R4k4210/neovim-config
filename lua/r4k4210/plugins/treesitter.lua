@@ -23,6 +23,10 @@ return {
       "yaml",
       "bash",
       "python",
+      "go",
+      "gomod",
+      "gosum",
+      "gowork",
     }
 
     -- Schedule parser installation after startup

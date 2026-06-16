@@ -71,6 +71,18 @@ return {
     })
     setup("pyright")
     setup("black")
+    setup("gopls", {
+      settings = {
+        gopls = {
+          analyses = {
+            unusedparams = true,
+            shadow = true,
+          },
+          staticcheck = true,
+          gofumpt = true,
+        },
+      },
+    })
     setup("clangd")
     setup("arduino_language_server", {
       cmd = {
@@ -122,6 +134,7 @@ return {
       sass = { "cssls", "tailwindcss" },
       less = { "cssls", "tailwindcss" },
       python = { "pyright" },
+      go = { "gopls" },
       lua = { "lua_ls" },
       c = { "clangd" },
       cpp = { "clangd" },
