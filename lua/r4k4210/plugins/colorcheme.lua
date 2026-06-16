@@ -7,7 +7,6 @@ return {
 
       require("onedark").setup({
         style = "deep",
-        transparent = true,
         colors = {
           bg0 = c.base.bg,
         },
@@ -22,12 +21,12 @@ return {
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                           NeoTree                                 │
           -- └──────────────────────────────────────────────────────────────────┘
-          NeoTreeNormal = { bg = "NONE", fg = c.neotree.fg },
-          NeoTreeNormalNC = { bg = "NONE", fg = c.neotree.fg },
-          NeoTreeSignColumn = { bg = "NONE" },
-          NeoTreeEndOfBuffer = { bg = "NONE", fg = c.neotree.bg },
-          NeoTreeWinSeparator = { bg = "NONE", fg = c.neotree.bg },
-          NeoTreeVertSplit = { bg = "NONE", fg = c.neotree.bg },
+          NeoTreeNormal = { bg = c.neotree.bg, fg = c.neotree.fg },
+          NeoTreeNormalNC = { bg = c.neotree.bg, fg = c.neotree.fg },
+          NeoTreeSignColumn = { bg = c.neotree.bg },
+          NeoTreeEndOfBuffer = { bg = c.neotree.bg, fg = c.neotree.bg },
+          NeoTreeWinSeparator = { bg = c.neotree.bg, fg = c.neotree.bg },
+          NeoTreeVertSplit = { bg = c.neotree.bg, fg = c.neotree.bg },
           NeoTreeCursorLine = { bg = c.neotree.cursor_line },
           NeoTreeDirectoryName = { fg = c.neotree.fg },
           NeoTreeDirectoryIcon = { fg = c.neotree.directory_icon },
@@ -39,7 +38,7 @@ return {
           NeoTreeGitDeleted = { fg = c.neotree.git_deleted },
           NeoTreeGitUntracked = { fg = c.neotree.git_untracked },
           NeoTreeIndentMarker = { fg = c.neotree.indent_marker },
-          NeoTreeFloatBorder = { bg = c.base.bg_light, fg = c.neotree.indent_marker },
+          NeoTreeFloatBorder = { bg = c.neotree.bg, fg = c.neotree.indent_marker },
           NeoTreeFloatTitle = { bg = c.neotree.directory_icon, fg = c.neotree.bg, bold = true },
 
           -- ┌──────────────────────────────────────────────────────────────────┐
@@ -66,10 +65,10 @@ return {
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                      Avante Sidebar & Input                       │
           -- └──────────────────────────────────────────────────────────────────┘
-          AvanteSidebarNormal = { bg = "NONE", fg = c.avante.sidebar_fg },
-          AvantePromptInput = { bg = "NONE", fg = c.avante.prompt_fg },
-          AvantePromptInputBorder = { bg = "NONE", fg = c.avante.prompt_border },
-          AvantePopupHint = { bg = "NONE", fg = c.avante.sidebar_fg },
+          AvanteSidebarNormal = { bg = c.avante.sidebar_bg, fg = c.avante.sidebar_fg },
+          AvantePromptInput = { bg = c.avante.prompt_bg, fg = c.avante.prompt_fg },
+          AvantePromptInputBorder = { bg = c.avante.prompt_bg, fg = c.avante.prompt_border },
+          AvantePopupHint = { bg = c.avante.popup_bg, fg = c.avante.sidebar_fg },
           AvanteInlineHint = { fg = c.avante.inline_hint, italic = true },
 
           -- ┌──────────────────────────────────────────────────────────────────┐
@@ -117,10 +116,10 @@ return {
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                        Avante Task Status                         │
           -- └──────────────────────────────────────────────────────────────────┘
-          AvanteTaskRunning = { fg = c.avante.task_running, bg = "NONE" },
-          AvanteTaskCompleted = { fg = c.avante.task_completed, bg = "NONE" },
-          AvanteTaskFailed = { fg = c.avante.task_failed, bg = "NONE" },
-          AvanteThinking = { fg = c.avante.task_running, bg = "NONE" },
+          AvanteTaskRunning = { fg = c.avante.task_running, bg = c.avante.sidebar_bg },
+          AvanteTaskCompleted = { fg = c.avante.task_completed, bg = c.avante.sidebar_bg },
+          AvanteTaskFailed = { fg = c.avante.task_failed, bg = c.avante.sidebar_bg },
+          AvanteThinking = { fg = c.avante.task_running, bg = c.avante.sidebar_bg },
 
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                          Avante Misc                              │
@@ -129,8 +128,8 @@ return {
           AvanteAnnotation = { fg = c.avante.annotation, italic = true },
           AvanteCommentFg = { fg = c.avante.suggestion },
           AvanteReversedNormal = { fg = c.avante.title_fg, bg = c.avante.sidebar_fg },
-          AvanteSidebarWinSeparator = { fg = c.avante.separator, bg = "NONE" },
-          AvanteSidebarWinHorizontalSeparator = { fg = c.avante.separator, bg = "NONE" },
+          AvanteSidebarWinSeparator = { fg = c.avante.separator, bg = c.avante.sidebar_bg },
+          AvanteSidebarWinHorizontalSeparator = { fg = c.avante.separator, bg = c.avante.sidebar_bg },
 
           -- ┌──────────────────────────────────────────────────────────────────┐
           -- │                      Snacks Picker/Explorer                       │
@@ -149,8 +148,8 @@ return {
           SnacksPickerFile = { fg = c.snacks.file_fg },
 
           -- Snacks Explorer specific
-          SnacksExplorerNormal = { bg = "NONE", fg = c.snacks.normal_fg },
-          SnacksExplorerBorder = { bg = "NONE", fg = c.snacks.border },
+          SnacksExplorerNormal = { bg = c.snacks.normal_bg, fg = c.snacks.normal_fg },
+          SnacksExplorerBorder = { bg = c.snacks.normal_bg, fg = c.snacks.border },
           SnacksExplorerTitle = { bg = c.snacks.title_bg, fg = c.snacks.title_fg, bold = true },
 
           -- Snacks Notifier
