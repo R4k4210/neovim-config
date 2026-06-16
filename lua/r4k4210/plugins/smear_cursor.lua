@@ -20,9 +20,9 @@ return {
       -- Smear cursor in insert mode.
       smear_insert_mode = true,
 
-      -- Fire hazard
       cursor_color = c.smear.cursor,
-      particles_enabled = true,
+
+      -- The smear "halo"/trail animation stays on; these tune it.
       stiffness = 0.5,
       trailing_stiffness = 0.2,
       trailing_exponent = 5,
@@ -31,6 +31,11 @@ return {
       gamma = 1,
       never_draw_over_target = true,
       hide_target_hack = true,
+
+      -- Particles ("fire") OFF — they drew over cells and hid characters while
+      -- conceal rendered. The particle_* knobs below are kept but inert; flip
+      -- this back to `true` to bring the fire effect back.
+      particles_enabled = false,
       particle_spread = 1,
       particles_per_second = 500,
       particles_per_length = 50,
