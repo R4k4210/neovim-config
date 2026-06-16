@@ -71,5 +71,16 @@ return {
         },
       },
     },
+    -- DARC: render control codes in place of {{uuid}} refs. Plugging into
+    -- render-markdown's pipeline (instead of our own extmarks) lets one system
+    -- own conceal + anti_conceal, so there's no cursor-line flicker.
+    custom_handlers = {
+      markdown = {
+        extends = true,
+        parse = function(ctx)
+          return require("r4k4210.darc_uuid").rm_parse(ctx)
+        end,
+      },
+    },
   },
 }
