@@ -39,17 +39,23 @@ return {
     require("avante").setup({
       -- default_prompt = "default",
       template_dir = vim.fn.stdpath("config") .. "/lua/r4k4210/llm/templates",
-      provider = "openrouter-gpt5", -- Switch to "claude-code" for agentic mode
+      provider = "claude-code", -- ACP agentic Claude via your logged-in CLI (subscription)
       providers = providers,
 
       -- ACP (Agent Client Protocol) providers for agentic capabilities
       acp_providers = {
         ["claude-code"] = {
-          command = "npx",
-          args = { "@zed-industries/claude-code-acp" },
+          -- Zed's bridge (bundles a compatible Claude Code SDK). Installed globally
+          -- via `npm i -g @zed-industries/claude-code-acp`. Uses your logged-in
+          -- subscription (no API key). Picks up the `opus[1m]` default from
+          -- ~/.claude/settings.json -> Opus 4.8 with 1M context.
+          command = "claude-code-acp",
+          args = {},
           env = {
             NODE_NO_WARNINGS = "1",
-            CLAUDE_CODE_OAUTH_TOKEN = os.getenv("CLAUDE_CODE_OAUTH_TOKEN"),
+            -- avante only forwards PATH to the ACP process (see acp_client.lua),
+            -- so HOME must be passed or the bridge can't find your credentials.
+            HOME = os.getenv("HOME"),
           },
         },
         ["gemini-cli"] = {
