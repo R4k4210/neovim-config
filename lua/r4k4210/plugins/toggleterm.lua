@@ -76,8 +76,16 @@ return {
         :toggle()
     end, vim.tbl_extend("force", opts, { desc = "Lazydocker" }))
 
-    -- Terminal mode keymaps (only essential ones to avoid Which-key conflicts)
-    keymap("t", "<esc>", [[<C-\><C-n>]], opts)
-    keymap("t", "jk", [[<C-\><C-n>]], opts)
+    -- Terminal mode keymaps (only essential ones to avoid Which-key conflicts).
+    -- Buffer-local to toggleterm so other terminals (e.g. the sidekick Claude
+    -- CLI) still receive <Esc>
+    vim.api.nvim_create_autocmd("TermOpen", {
+      pattern = "term://*toggleterm#*",
+      callback = function(ev)
+        local bopts = vim.tbl_extend("force", opts, { buffer = ev.buf })
+        keymap("t", "<esc>", [[<C-\><C-n>]], bopts)
+        keymap("t", "jk", [[<C-\><C-n>]], bopts)
+      end,
+    })
   end,
 }
