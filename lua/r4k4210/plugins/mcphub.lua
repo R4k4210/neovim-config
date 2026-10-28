@@ -16,11 +16,6 @@ return {
       ---Chat-plugin related options-----------------
       auto_approve = false, -- Auto approve mcp tool calls
       auto_toggle_mcp_servers = true, -- Disable automatic server management to prevent conflicts
-      extensions = {
-        avante = {
-          make_slash_commands = true,
-        },
-      },
 
       --- Plugin specific options-------------------
       native_servers = {}, -- add your custom lua native servers here
