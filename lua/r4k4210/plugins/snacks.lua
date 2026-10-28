@@ -15,6 +15,7 @@ return {
         picker = {
           layout = layout,
           enabled = true,
+          ui_select = false, -- vim.ui.select se define en init, con la altura corregida
           actions = require("trouble.sources.snacks").actions, -- integración con trouble
           hidden = true,
           win = {
@@ -63,6 +64,24 @@ return {
     end,
     keys = keymaps,
     init = function()
+      -- snacks calcula la altura de la lista como `vim.o.lines * 0.8 - 10`, que con listas
+      -- largas da un número no entero y nvim_win_set_config lo rechaza (E5108)
+      vim.ui.select = function(items, opts, on_choice)
+        opts = vim.tbl_extend("force", {}, opts or {})
+        opts.snacks = Snacks.config.merge({}, opts.snacks or {}, {
+          layout = {
+            config = function(layout)
+              for _, box in ipairs(layout.layout) do
+                if box.win == "list" and not box.height then
+                  box.height = math.max(math.min(#items, math.floor(vim.o.lines * 0.8 - 10)), 2)
+                end
+              end
+            end,
+          },
+        })
+        return Snacks.picker.select(items, opts, on_choice)
+      end
+
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
         callback = function()
