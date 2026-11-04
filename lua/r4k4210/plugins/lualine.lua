@@ -1,6 +1,6 @@
 return {
   "nvim-lualine/lualine.nvim",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
+  dependencies = { "nvim-tree/nvim-web-devicons", "crew.nvim" },
   config = function()
     local lualine = require("lualine")
     local c = require("r4k4210.core.colors")
@@ -224,8 +224,13 @@ return {
       end,
     })
 
-    ins_left({
-      -- Lsp server name
+    -- crew.nvim workspace pills (number + state icon), centered: lualine adds
+    -- its own %= before the right section, so the pills sit between two splits
+    ins_left({ "crew" })
+
+    -- Add components to right sections
+    ins_right({
+      -- Lsp server name, first item on the right
       function()
         local msg = "No Active Lsp"
         local clients = vim.lsp.get_clients({ bufnr = 0 })
@@ -241,7 +246,6 @@ return {
       color = { fg = c.base.fg_light, gui = "bold" },
     })
 
-    -- Add components to right sections
     ins_right({
       -- Macro recording indicator
       function()
