@@ -8,11 +8,11 @@ return {
       separator_style = "slant",
     },
   },
-  config = function()
+  config = function(_, opts)
     local bufferline = require("bufferline")
     -- local mocha = require("catppuccin.palettes").get_palette("mocha")
 
-    bufferline.setup(
+    bufferline.setup(opts
       --   {
       --   highlights = require("catppuccin.groups.integrations.bufferline").get({
       --     styles = { "italic", "bold" },
