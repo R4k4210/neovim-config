@@ -15,6 +15,7 @@ require("lazy").setup({
   { import = "r4k4210.plugins" },
   { import = "r4k4210.plugins.lsp" },
 }, {
+  dev = { path = "~/_dev/_personal/" }, -- for local dev
   install = {
     -- colorscheme = { "catppuccin" },
   },

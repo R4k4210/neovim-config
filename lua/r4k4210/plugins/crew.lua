@@ -6,19 +6,22 @@
 local claude = { "claude", "--settings", '{"tui":"default"}' }
 
 return {
-  dir = "~/_dev/_personal/crew.nvim",
-  name = "crew.nvim",
+  "R4k4210/crew.nvim",
+  dev = true,
   lazy = false,
   opts = {
     keys = {
       stopinsert = "jk", -- same as toggleterm
     },
     agents = {
-      claude = { cmd = claude },
+      -- statusline = false: inside crew only crew's header and pills show usage.
+      claude = { cmd = claude, statusline = false },
       ["claude-work"] = {
         cmd = claude,
+        statusline = false,
         env = { CLAUDE_CONFIG_DIR = vim.fn.expand("~/.claude-work") },
       },
+      agy = { cmd = { "agy" }, statusline = false },
     },
   },
   keys = {
