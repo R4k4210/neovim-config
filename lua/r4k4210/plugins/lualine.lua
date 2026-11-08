@@ -1,6 +1,8 @@
 return {
   "nvim-lualine/lualine.nvim",
-  dependencies = { "nvim-tree/nvim-web-devicons", "crew.nvim" },
+  dependencies = {
+    "nvim-tree/nvim-web-devicons", "crew.nvim"
+  },
   config = function()
     local lualine = require("lualine")
     local c = require("r4k4210.core.colors")
