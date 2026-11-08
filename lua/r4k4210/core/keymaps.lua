@@ -7,7 +7,7 @@ local keymap = vim.keymap -- for conciseness
 keymap.set("n", "<Esc>", "<cmd>noh<CR>", { silent = true, noremap = true })
 
 -- close
-keymap.set("n", "<leader>q", ":q<CR>", { desc = "Close buffer" })
+keymap.set("n", "<leader>q", "<cmd>confirm qa<CR>", { desc = "Quit Neovim" })
 keymap.set("n", "<leader>w", ":w!<CR>", { desc = "Save buffer forced" })
 
 -- clear search highlights
